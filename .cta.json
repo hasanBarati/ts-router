@@ -1,0 +1,15 @@
+{
+  "framework": "react",
+  "projectName": "my-app2",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "toolchain": "none",
+  "mode": "code-router",
+  "git": true,
+  "variableValues": {},
+  "version": 1,
+  "existingAddOns": [
+    "shadcn"
+  ]
+}
