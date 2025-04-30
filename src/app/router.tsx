@@ -8,12 +8,14 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
-import { DashboardPage } from "@/pages/DashboardPage/ui/Page";
+
 import { UserFormPage } from "@/pages/UserFormPage/ui/Page";
-import { loadUsers } from "@/pages/DashboardPage/model/loader";
+
+import { dashboardRoute } from "@/pages/DashboardPage/route";
+
 
 // Create a root route
-const rootRoute = createRootRoute({
+export const rootRoute = createRootRoute({
   component: () => (
     <>
       <Outlet />
@@ -29,14 +31,6 @@ const indexRoute = createRoute({
   component: App,
 });
 
-// Create dashboard route
-export const dashboardRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/dashboard",
-  component: DashboardPage,
-  loader: loadUsers,
-  staleTime: 1000 * 60, // کش 1 دقیقه
-});
 
 // Create form route
 const formRoute = createRoute({

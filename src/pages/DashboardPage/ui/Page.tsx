@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 // import { useDashboard } from '../hooks/useDashboard';
-import { Filter } from './Filter';
-import { List } from './List';
+// import { Filter } from './Filter';
+// import { List } from './List';
 import { useLoaderData } from '@tanstack/react-router';
-import { dashboardRoute } from '@/app/router';
+import { dashboardRoute } from '../route';
+
+
 
 export const DashboardPage: React.FC = () => {
   // const { items, isLoading } = useDashboard();
