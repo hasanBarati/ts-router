@@ -8,10 +8,11 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
-
-import { UserFormPage } from "@/pages/UserFormPage/ui/Page";
-
 import { dashboardRoute } from "@/pages/DashboardPage/route";
+import { loginRoute } from "@/pages/login/route";
+import { tableRoute } from "@/pages/tablepage/route";
+import { fetchUsers } from "./tableAPI";
+import { useAuthStore } from "./auth-store";
 
 
 // Create a root route
@@ -29,21 +30,22 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: App,
+  loader: async () => {
+    const user = await fetchUsers(); 
+    console.log("user are",user)
+    useAuthStore.getState().setUserInfo(user);
+    return user;
+  },
 });
 
 
-// Create form route
-const formRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/form",
-  component: UserFormPage,
-});
 
 // Create the route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
   dashboardRoute,
-  formRoute,
+  loginRoute,
+  tableRoute
 ]);
 
 // Create the router instance

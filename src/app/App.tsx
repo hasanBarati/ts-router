@@ -1,9 +1,9 @@
+import { Layout } from "./layout";
 
-
-import { Layout } from './layout';
-
-export const App = () => (
-  <Layout>
-    <p>sadsa</p>
-  </Layout>
-);
+export const App = () => {
+  return (
+    <Layout>
+      <p>sadsa</p>
+    </Layout>
+  );
+};

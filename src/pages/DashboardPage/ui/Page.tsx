@@ -10,6 +10,7 @@ import { dashboardRoute } from '../route';
 export const DashboardPage: React.FC = () => {
   // const { items, isLoading } = useDashboard();
   const [filter, setFilter] = useState('');
+
   // const filtered = items.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
   const { users } = useLoaderData({ from: dashboardRoute.id })
   // if (isLoading) return <div>Loading dashboard...</div>;
