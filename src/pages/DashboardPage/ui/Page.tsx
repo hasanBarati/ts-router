@@ -4,17 +4,19 @@ import React, { useState } from 'react';
 // import { List } from './List';
 import { useLoaderData } from '@tanstack/react-router';
 import { dashboardRoute } from '../route';
+import { useAuthStore } from '@/app/auth-store';
 
 
 
 export const DashboardPage: React.FC = () => {
+  const authState = useAuthStore();
   // const { items, isLoading } = useDashboard();
   const [filter, setFilter] = useState('');
 
   // const filtered = items.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
   const { users } = useLoaderData({ from: dashboardRoute.id })
   // if (isLoading) return <div>Loading dashboard...</div>;
-   console.log("usersusers",users)
+   console.log("authState",authState)
   return (
     <div>
       <h1 className="text-2xl mb-4">Dashboard</h1>

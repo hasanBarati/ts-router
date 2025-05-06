@@ -30,5 +30,5 @@ export const fetchUsers = async (): Promise<User[]> => {
         },
       }
     )
-    .then((res) => res.data.json());
+    .then((res) => res.data);
 };

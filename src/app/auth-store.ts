@@ -1,14 +1,20 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { createJSONStorage, persist } from "zustand/middleware";
+import { createStore } from "@/shared/lib/zustand";
 
 type AuthState = {
-
-  setUserInfo:(user)=>void
+  setUserInfo: (user: any) => void;
 };
 
-export const useAuthStore = create<AuthState>()(
-  devtools((set) => ({
-    setUserInfo:(user)=>set(user)
-    
-  }))
+export const useAuthStore = createStore<AuthState>(
+  persist(
+    (set) => ({
+      setUserInfo: (user) => set(user),
+    }),
+    {
+      name: "food-storage",
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
 );
+
+
