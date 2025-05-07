@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
+import { DataTable } from "@/features/data-table";
+import useOrderFilter from "../model/usegetTableData";
+import { columns } from "./coulmns";
+import { Button } from "@/shared/ui/button";
+import { FilterTable } from "./filter";
 
-import { columns, type Payment } from "./coulmns";
-import { DataTable } from "@/shared/ui/data-table";
+export const TablePage: React.FC = () => {
+  const [filters, setFilters] = useState();
 
-export const TablePage: React.FC = () => (
-  <div>
-    <h1 className="text-2xl mb-4">Table page</h1>
-    <DataTable data={data} columns={columns}  />
-  </div>
-);
 
-const data: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-];
+
+  return (
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl mb-4">جدول سفارشات</h1>
+      {/* <Button
+        title="dfdsfsd"
+        onClick={() =>
+          handleApplyFilters({
+            ...filters,
+            selectHub: { ...filters.selectHub, label: 'dfdsfsd'},
+          })
+        }
+      >
+        filter
+      </Button> */}
+      {/* <div className="mb-4">
+        <input
+          className="border p-2 rounded"
+          placeholder="جستجو برچسب هاب"
+          onChange={(e) =>
+            handleApplyFilters({
+              ...filters,
+              selectHub: { ...filters.selectHub, label: e.target.value },
+            })
+          }
+        />
+      </div> */}
+      <DataTable
+        columns={columns}
+        filters={filters}
+        fetchData={(f, p) => useOrderFilter(f, p)}
+        initialPageSize={10}
+      />
+      <FilterTable setFilters={setFilters} />
+    </div>
+  );
+};

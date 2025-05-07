@@ -33,7 +33,7 @@ const indexRoute = createRoute({
   loader: async () => {
     const user = await fetchUsers(); 
     console.log("user are",user)
-    useAuthStore.getState().setUserInfo(user);
+    // useAuthStore.getState().setUserInfo(user);
     return user;
   },
 });
