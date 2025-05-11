@@ -19,4 +19,6 @@ export const oidcConfig: AuthProviderProps = {
     onSigninCallback: () => {
       window.history.replaceState({}, document.title, "/");
     },
+    
   };
+

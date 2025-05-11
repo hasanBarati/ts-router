@@ -1,48 +1,80 @@
+// src/features/orders/components/TablePage.tsx
 import React, { useState } from "react";
-import { DataTable } from "@/features/data-table";
-import useOrderFilter from "../model/usegetTableData";
-import { columns } from "./coulmns";
-import { Button } from "@/shared/ui/button";
+
+import type { Order, OrderFilters } from "../model/types";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { FilterTable } from "./filter";
+import { DataTable } from "@/features/data-table";
+import { useOrderFilter } from "../model/usegetTableData";
+import { columns } from "./coulmns";
 
 export const TablePage: React.FC = () => {
-  const [filters, setFilters] = useState();
+  const { register, handleSubmit, reset, getValues } =
+    useForm<OrderFilters>({
+      defaultValues: {
+        selectHub: {
+          id: 2,
+        },
+        orderDate: {
+          day: 21,
+          month: 2,
+          year: 1404,
+        },
+      },
+    });
 
+  // 2) state فیلترهای اعمال‌شده
+  const [appliedFilters, setAppliedFilters] = useState<OrderFilters>({
+    selectHub: {
+      id: 2,
+    },
+    orderDate: {
+      day: 21,
+      month: 2,
+      year: 1404,
+    },
+  });
 
+  // وقتی Submit شد، state رو آپدیت کن
+  const onSubmit: SubmitHandler<OrderFilters> = (values) => {
+    setAppliedFilters(values);
+  };
+
+  console.log("getValuesgetValues", getValues());
 
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-2xl mb-4">جدول سفارشات</h1>
-      {/* <Button
-        title="dfdsfsd"
-        onClick={() =>
-          handleApplyFilters({
-            ...filters,
-            selectHub: { ...filters.selectHub, label: 'dfdsfsd'},
-          })
-        }
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 mb-6"
+        autoComplete="off"
       >
-        filter
-      </Button> */}
-      {/* <div className="mb-4">
-        <input
-          className="border p-2 rounded"
-          placeholder="جستجو برچسب هاب"
-          onChange={(e) =>
-            handleApplyFilters({
-              ...filters,
-              selectHub: { ...filters.selectHub, label: e.target.value },
-            })
-          }
-        />
-      </div> */}
-      <DataTable
+        <FilterTable register={register} />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-green-600 text-white rounded"
+        >
+          اعمال فیلتر
+        </button>
+        <button
+          type="button"
+          className="px-4 py-2 bg-gray-300 text-black rounded"
+          onClick={() => {
+            reset();
+            setAppliedFilters({ selectHub: null, orderDate: null });
+          }}
+        >
+          پاک کردن فیلتر
+        </button>
+      </form>
+
+      <DataTable<Order, OrderFilters>
         columns={columns}
-        filters={filters}
-        fetchData={(f, p) => useOrderFilter(f, p)}
+        filters={appliedFilters}
+        fetchQuery={useOrderFilter}
         initialPageSize={10}
       />
-      <FilterTable setFilters={setFilters} />
     </div>
   );
 };
