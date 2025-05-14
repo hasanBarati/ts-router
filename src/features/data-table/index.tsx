@@ -25,7 +25,6 @@ export function DataTable<T, F>({
   fetchQuery,
   initialPageSize = 10,
 }: DataTableProps<T, F>) {
-  // 1. همۀ هوک‌ها بدون شرط
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
 
@@ -33,24 +32,22 @@ export function DataTable<T, F>({
     setPageNumber(1);
   }, [filters]);
 
-  // اینجا useQuery (داخل fetchQuery) هم یک hook است
+
   const { data, isLoading, isFetching, error } = fetchQuery(filters, {
     pageNumber,
     pageSize,
   });
 
-  // useMemo هم hook نیست اما useReactTable زیر تعداد ثابت هوک‌ها را حفظ می‌کند
+
   const rows = useMemo(() => data?.content ?? [], [data]);
   const totalPages = data?.totalPages ?? 1;
 
-  // این هم یک hook است: همیشه صدا زده شود
   const table = useReactTable({
     data: rows,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // 2. تنها یکبار return داریم و داخلش شرطی رندر می‌کنیم
   return (
     <>
       {isLoading ? (

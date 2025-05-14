@@ -15,13 +15,14 @@ export interface DateDto {
   // Generic ID+Text type
   export interface SelectOption {
     id: number;
-    text: string | null;
+    text: string ;
   }
   
   // Filters for querying orders
   export interface OrderFilters {
     selectHub?: SelectOption | null;
     orderDate?: DateDto | null;
+    selectCustomer?:SelectOption | null
   }
   
   // Consignment types

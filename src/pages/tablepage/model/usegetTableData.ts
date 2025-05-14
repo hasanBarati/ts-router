@@ -16,6 +16,6 @@ export const useOrderFilter = (
       );
       return response.data.payload as DataResponse<Order>;
     },
-    keepPreviousData: true,
+    // keepPreviousData: true,
   });
 };
