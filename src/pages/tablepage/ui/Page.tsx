@@ -23,7 +23,7 @@ export const TablePage: React.FC = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(() => {})}>
           <FilterTable />
-          <FilterChips<OrderFilters>
+          {/* <FilterChips<OrderFilters>
             customLabels={{
               selectHub: "هاب انتخابی",
               selectCustomer: "مشتری",
@@ -35,7 +35,7 @@ export const TablePage: React.FC = () => {
               }
               return value?.text || value;
             }}
-          />
+          /> */}
         </form>
       </FormProvider>
       <DataTable<Order, OrderFilters>

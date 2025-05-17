@@ -44,7 +44,7 @@ export function AsyncSelect<T>({
     queryFn: () => fetchOption(url, filter, mapResponse),
   });
 
-  console.log("value", value);
+
   return (
     <Select
       value={value ? JSON.stringify(value) : ""}
@@ -66,15 +66,16 @@ export function AsyncSelect<T>({
             : value?.text || placeholder}{" "}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent  >
+      <SelectScrollDownButton />
         {!isLoading &&
           !isError &&
           options.map((opt: Option) => (
-            <SelectItem key={opt.id} value={JSON.stringify(opt)}>
+            <SelectItem key={opt.id} value={opt.text}>
               {opt.text}
             </SelectItem>
           ))}
-        {/* <SelectScrollDownButton /> */}
+        <SelectScrollDownButton />
       </SelectContent>
     </Select>
   );
