@@ -1,18 +1,11 @@
-// filter.tsx
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
-import type { OrderFilters } from "../model/types";
+import { AsyncPopoverSelect } from "@/features/async-select/async-select";
 import { Input } from "@/shared/ui/input";
-import { AsyncSelect } from "@/features/async-select/async-select";
+import React from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import type { OrderFilters } from "../model/types";
 
 export const FilterTable: React.FC = () => {
-  const {
-    control,
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitSuccessful },
-  } = useFormContext<OrderFilters>();
+  const { control, register, reset } = useFormContext<OrderFilters>();
 
   return (
     <div className="space-y-6 mb-6">
@@ -21,7 +14,7 @@ export const FilterTable: React.FC = () => {
           name="selectHub"
           control={control}
           render={({ field }) => (
-            <AsyncSelect
+            <AsyncPopoverSelect
               url="/core-api/hub/select"
               queryKey={["hubs"]}
               placeholder="هاب"
@@ -31,7 +24,7 @@ export const FilterTable: React.FC = () => {
           )}
         />
 
-        <Controller
+        {/* <Controller
           name="selectCustomer"
           control={control}
           render={({ field }) => (
@@ -47,7 +40,7 @@ export const FilterTable: React.FC = () => {
               })}
             />
           )}
-        />
+        /> */}
 
         <div>
           <label className="block mb-1">تاریخ سفارش</label>
@@ -65,7 +58,6 @@ export const FilterTable: React.FC = () => {
         </button>
         <button
           type="submit"
-   
           // onClick={handleSubmit(()=>{})}
           className="px-4 py-2 bg-green-600 text-white rounded"
         >

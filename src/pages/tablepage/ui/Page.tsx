@@ -17,11 +17,16 @@ export const TablePage: React.FC = () => {
     },
   });
 
+  const onSubmit = (data: OrderFilters) => {
+    console.log("Submitted data:", data);
+    // در اینجا می‌توانید داده‌های فیلتر را پردازش کنید
+  };
+
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-2xl mb-4">جدول سفارشات</h1>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(() => {})}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FilterTable />
           {/* <FilterChips<OrderFilters>
             customLabels={{
