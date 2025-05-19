@@ -9,7 +9,7 @@ export const FilterTable: React.FC = () => {
 
   return (
     <div className="space-y-6 mb-6">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <Controller
           name="selectHub"
           control={control}
@@ -58,7 +58,6 @@ export const FilterTable: React.FC = () => {
         </button>
         <button
           type="submit"
-          // onClick={handleSubmit(()=>{})}
           className="px-4 py-2 bg-green-600 text-white rounded"
         >
           اعمال فیلتر

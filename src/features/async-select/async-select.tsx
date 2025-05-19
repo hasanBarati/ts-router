@@ -48,10 +48,9 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
     const s = new Set<string | number>();
     if (mode === "multiple" && Array.isArray(value)) {
       value.forEach((v) => s.add(v.id));
-    } else {
+    } else if (value) {
       s.add((value as Option).id);
     }
-
     return s;
   }, [mode, value]);
 
@@ -81,91 +80,99 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   }, [mode, value, placeholder]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "w-full justify-between text-sm",
-            open && "ring-2",
-            "ring-offset-background focus:ring-2 focus:ring-ring"
-          )}
+    <div className="space-y-1 w-full">
+      {
+        <label className="text-sm font-medium text-muted-foreground">
+          {"label"}
+        </label>
+      }
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-between text-sm",
+              open && "ring-2",
+              "ring-offset-background focus:ring-2 focus:ring-ring"
+            )}
+          >
+            <span className={cn(!triggerText && "text-muted-foreground")}>
+              {isLoading
+                ? "در حال بارگذاری..."
+                : isError
+                ? "خطا در بارگذاری"
+                : triggerText}
+            </span>
+            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent
+          side="bottom"
+          align="start"
+          sideOffset={4}
+          className=" border rounded-md shadow-md overflow-auto"
+          style={{
+            width: "var(--radix-popover-trigger-width)",
+            maxHeight: listHeight,
+          }}
         >
-          <span className={cn(!triggerText && "text-muted-foreground")}>
-            {isLoading
-              ? "در حال بارگذاری..."
-              : isError
-              ? "خطا در بارگذاری"
-              : triggerText}
-          </span>
-          <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
-        </Button>
-      </PopoverTrigger>
+          {mode === "multiple" && (
+            <div className="flex items-center px-3 py-2 border-b">
+              <Checkbox
+                id="select-all"
+                checked={allSelected}
+                onCheckedChange={toggleAll}
+                className="ml-2"
+              />
+              <label htmlFor="select-all" className="text-sm select-none">
+                انتخاب همه
+              </label>
+            </div>
+          )}
 
-      <PopoverContent
-        side="bottom"
-        align="start"
-        sideOffset={4}
-        className=" border rounded-md shadow-md overflow-auto"
-        style={{
-          width: "var(--radix-popover-trigger-width)",
-          maxHeight: listHeight,
-        }}
-      >
-        {mode === "multiple" && (
-          <div className="flex items-center px-3 py-2 border-b">
-            <Checkbox
-              id="select-all"
-              checked={allSelected}
-              onCheckedChange={toggleAll}
-              className="ml-2"
-            />
-            <label htmlFor="select-all" className="text-sm select-none">
-              انتخاب همه
-            </label>
-          </div>
-        )}
-
-        <div className="divide-y divide-border">
-          {options.map((opt: Option) => {
-            const checked = selectedIds.has(opt.id);
-            return (
-              <div
-                key={opt.id}
-                className={cn(
-                  "flex items-center px-3 py-2 cursor-pointer text-sm",
-                  checked ? "bg-accent" : "hover:bg-accent/50"
-                )}
-                onClick={() => toggleOne(opt, !checked)}
-              >
-                {mode === "single" && (
-                  <Checkbox
-                    id={`chk-${opt.id}`}
-                    checked={checked}
-                    onCheckedChange={(c) => toggleOne(opt, !!c)}
-                    className="ml-2"
-                  />
-                )}
-
-                {mode === "" && checked && (
-                  <Check className="h-4 w-4 ml-2 text-primary" />
-                )}
-
-                <label
-                  htmlFor={
-                    mode === "single" || mode === "multiple"
-                      ? `chk-${opt.id}`
-                      : undefined
-                  }
-                  className="flex-1 select-none"
+          <div className="divide-y divide-border">
+            {options.map((opt: Option) => {
+              const checked = selectedIds.has(opt.id);
+              return (
+                <div
+                  key={opt.id}
+                  className={cn(
+                    "flex items-center px-3 py-2 cursor-pointer text-sm",
+                    checked ? "bg-accent" : "hover:bg-accent/50"
+                  )}
+                  onClick={() => toggleOne(opt, !checked)}
                 >
-                  {opt.text}
-                </label>
-              </div>
-            );
-          })}
-        </div>
-      </PopoverContent>
-    </Popover>
+                  {mode === "single" && (
+                    <Checkbox
+                      id={`chk-${opt.id}`}
+                      checked={checked}
+                      onCheckedChange={(c) => toggleOne(opt, !!c)}
+                      className="ml-2"
+                    />
+                  )}
+
+                  {mode === "" && checked && (
+                    <Check className="h-4 w-4 ml-2 text-primary" />
+                  )}
+
+                  <label
+                    htmlFor={
+                      mode === "single" || mode === "multiple"
+                        ? `chk-${opt.id}`
+                        : undefined
+                    }
+                    className="flex-1 select-none"
+                  >
+                    {opt.text}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }

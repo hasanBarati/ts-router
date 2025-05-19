@@ -7,6 +7,7 @@ export const useOrderFilter = (
   filters: OrderFilters,
   pagination: { pageNumber: number; pageSize: number }
 ): UseQueryResult<DataResponse<Order>, Error> => {
+  console.log("filters",filters)
   return useQuery({
     queryKey: ["orders", filters, pagination],
     queryFn: async () => {

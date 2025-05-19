@@ -1,54 +1,86 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import { X } from "lucide-react";
-import type { FieldValues } from "react-hook-form";
+// src/features/chip/filter-chips.tsx
+import { BicepsFlexed } from "lucide-react";
+import { useFormContext, type Path } from "react-hook-form";
 
-interface FilterChipsProps<T extends FieldValues> {
-  customLabels?: Partial<Record<keyof T, string>>;
-  formatValue?: (fieldName: keyof T, value: any) => string;
+interface FilterChipsProps<T extends Record<string, any>> {
+  appliedFilters: T;
+  onApply: (values: T) => void;
 }
 
-export function FilterChips<T extends FieldValues>({
-  customLabels,
-  formatValue,
-}: FilterChipsProps<T>) {
-  const { watch, resetField, handleSubmit } = useFormContext<T>();
-  const formValues = watch();
+export const FilterChips = <T extends Record<string, any>>({
+  appliedFilters,
+  onApply,
+}: FilterChipsProps<T>) => {
+  const { setValue, reset, formState } = useFormContext<T>();
 
-  const handleRemove = (fieldName: keyof T) => {
-    resetField(fieldName);
-    handleSubmit(() => {})(); // Submit form after removal
+  const persianLabels: Partial<Record<keyof T, string>> = {
+    selectHub: "هاب",
+    selectCustomer: "مشتری",
+    orderDate: "تاریخ سفارش",
+  } as Partial<Record<keyof T, string>>;
+
+  const formatValue = (key: keyof T, value: any) => {
+    if (key === "orderDate" && value) {
+      return `${value.year}/${value.month}/${value.day}`;
+    }
+    if (value?.text) return value.text;
+    if (value?.label) return value.label;
+    return value?.toString() || "";
   };
 
-  const activeFilters = Object.entries(formValues)
-    .filter(([_, value]) => value !== null && value !== undefined)
-    .map(([fieldName, value]) => ({
-      fieldName: fieldName as keyof T,
-      value,
-      label: customLabels?.[fieldName as keyof T] || String(fieldName),
+  const handleRemoveFilter = (key: Path<T>) => {
+    const defaultValue = formState.defaultValues?.[key];
+    setValue(key, defaultValue as any);
+    const currentValues = { ...appliedFilters, [key]: defaultValue };
+    onApply(currentValues);
+  };
+
+  const handleClearAll = () => {
+    reset();
+    onApply((formState.defaultValues as T) || ({} as T));
+  };
+
+  const activeFilters = Object.entries(appliedFilters)
+    .filter(([_, value]) => {
+      if (typeof value === "object" && value !== null) {
+        return Object.values(value).some((v) => v !== undefined && v !== "");
+      }
+      return value !== undefined && value !== "" && value !== null;
+    })
+    .map(([key, value]) => ({
+      key: key as Path<T>,
+      label: persianLabels[key as keyof T] || key,
+      value: formatValue(key as keyof T, value),
     }));
 
-  if (activeFilters.length === 0) return null;
-
   return (
-    <div className="mb-4 flex flex-wrap gap-2">
-      {activeFilters.map(({ fieldName, value, label }) => (
+    <div className="flex flex-wrap gap-3 mb-4">
+      {activeFilters.map(({ key, label, value }) => (
         <div
-          key={String(fieldName)}
-          className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-gray-800"
+          key={key.toString()}
+          className="bg-gray-100 px-3 py-1 rounded-full flex items-center gap-2"
         >
-          <span>
-            {label}: {formatValue ? formatValue(fieldName, value) : value?.text || value}
+          <span className="text-sm">
+            {label}: {value}
           </span>
           <button
             type="button"
-            onClick={() => handleRemove(fieldName)}
-            className="ml-1 text-gray-500 hover:text-gray-700"
+            onClick={() => handleRemoveFilter(key)}
+            className="text-gray-500 hover:text-red-600"
           >
-            <X size={14} />
+            <BicepsFlexed size={18} />
           </button>
         </div>
       ))}
+      {activeFilters.length > 0 && (
+        <button
+          type="button"
+          onClick={handleClearAll}
+          className="text-red-600 hover:text-red-700 text-sm flex items-center"
+        >
+          حذف همه فیلترها
+        </button>
+      )}
     </div>
   );
-}
+};

@@ -1,25 +1,27 @@
 // TablePage.tsx
-import React from "react";
+import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import type { Order, OrderFilters } from "../model/types";
 import { FilterTable } from "./filter";
 import { DataTable } from "@/features/data-table";
 import { useOrderFilter } from "../model/usegetTableData";
 import { columns } from "./coulmns";
-import { FilterChips } from "@/features/chip"; // import { Chips } from "@/features/chip";
+import { FilterChips } from "@/features/chip"; 
 
 export const TablePage: React.FC = () => {
   const methods = useForm<OrderFilters>({
     defaultValues: {
       selectHub: { id: 2, text: "هاب تهران" },
       selectCustomer: null,
-      orderDate: { day: 21, month: 2, year: 1404 },
+      orderDate: { day: 6, month: 6, year: 1403 },
     },
   });
+  const [appliedFilters, setAppliedFilters] = useState<OrderFilters>(
+    methods.getValues()
+  );
 
   const onSubmit = (data: OrderFilters) => {
-    console.log("Submitted data:", data);
-    // در اینجا می‌توانید داده‌های فیلتر را پردازش کنید
+    setAppliedFilters(data);
   };
 
   return (
@@ -28,24 +30,12 @@ export const TablePage: React.FC = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FilterTable />
-          {/* <FilterChips<OrderFilters>
-            customLabels={{
-              selectHub: "هاب انتخابی",
-              selectCustomer: "مشتری",
-              orderDate: "تاریخ",
-            }}
-            formatValue={(fieldName, value) => {
-              if (fieldName === "orderDate") {
-                return `${value.year}/${value.month}/${value.day}`;
-              }
-              return value?.text || value;
-            }}
-          /> */}
+          <FilterChips appliedFilters={appliedFilters} onApply={onSubmit} />
         </form>
       </FormProvider>
       <DataTable<Order, OrderFilters>
         columns={columns}
-        filters={methods.getValues()}
+        filters={appliedFilters}
         fetchQuery={useOrderFilter}
         initialPageSize={10}
       />
