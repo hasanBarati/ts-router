@@ -20,8 +20,11 @@ interface AsyncPopoverSelectProps<T> {
   filter?: string;
   mapResponse?: (item: any) => Option;
   listHeight?: number;
+  error?: string;
+  label?: string;
+  important?: boolean;
+  readonly?: boolean;
 }
-
 export function AsyncPopoverSelect<T extends Option | Option[]>({
   url,
   queryKey,
@@ -32,6 +35,10 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   filter = "",
   mapResponse,
   listHeight = 300,
+  error,
+  label,
+  important,
+  readonly,
 }: AsyncPopoverSelectProps<T>) {
   const {
     data: options = [],
@@ -80,23 +87,25 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   }, [mode, value, placeholder]);
 
   return (
-    <div className="space-y-1 w-full">
-      {
-        <label className="text-sm font-medium text-muted-foreground">
-          {"label"}
-        </label>
-      }
-
+    <div className="space-y-1 w-full ">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
-            className={cn(
-              "w-full justify-between text-sm",
-              open && "ring-2",
-              "ring-offset-background focus:ring-2 focus:ring-ring"
-            )}
+            className={` "[all:unset]" h-10 w-full autocompleteWrapper flex justify-between  ${
+              error && "border-red"
+            } ${readonly && "opacity-40"} `}
           >
+            <div
+              className={`autocompleteLabel  ${
+                error && "text-red"
+              } top-[-17px]`}
+            >
+              {label}
+              <span className="text-tomato font-extrabold text-lg h-4">
+                {important ? "*" : " "}
+              </span>
+            </div>
+
             <span className={cn(!triggerText && "text-muted-foreground")}>
               {isLoading
                 ? "در حال بارگذاری..."

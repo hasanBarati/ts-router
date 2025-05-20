@@ -20,6 +20,7 @@ export const FilterTable: React.FC = () => {
               placeholder="هاب"
               value={field.value}
               onChange={field.onChange}
+              label="هاب"
             />
           )}
         />
@@ -43,12 +44,12 @@ export const FilterTable: React.FC = () => {
         /> */}
 
         <div>
-          <label className="block mb-1">تاریخ سفارش</label>
-          <Input {...register("orderDate")} type="date" />
+
+          <Input {...register("orderDate")}  label="fgfdgdf" />
         </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex justify-end gap-4">
         <button
           type="button"
           onClick={() => reset()}

@@ -1,4 +1,37 @@
-@import 'tailwindcss';
-
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
+@config "../tailwind.config.js";
+@layer theme, base, components, utilities;
 
+@font-face {
+  font-family: "IRANSans";
+  src: url("/fonts/IRANSans/woff2/IRANSansWeb(FaNum).woff2") format("woff2"),
+    url("/fonts/IRANSans/ttf/IRANSansWeb(FaNum).ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --breakpoint-3xl: 1920px;
+  /* --primary: #ffeae9; */
+  --primary: #ef5644;
+}
+@theme {
+  --font-sans: "IRANSans", sans-serif;
+}
+@layer base {
+  body {
+    @apply text-sm; /* از کلاس‌های Tailwind مثل text-sm, text-lg, text-xl هم می‌تونی استفاده کنی */
+  }
+}
+@layer components {
+  .autocompleteInput {
+    @apply px-3 w-full before:content-[attr(data-before)] focus-visible:outline-none relative before:absolute before:-top-12 before:right-5 before:bg-white before:z-30 border-0 mt-1 text-sm;
+  }
+  .autocompleteWrapper {
+    @apply flex justify-between items-center relative h-10 px-2 border w-full    rounded-lg  text-gray-500;
+  }
+  .autocompleteLabel {
+    @apply absolute -top-4 right-5 bg-white   px-2 text-gray-500 text-sm;
+  }
+}

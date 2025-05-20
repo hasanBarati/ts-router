@@ -11,7 +11,7 @@ import { FilterChips } from "@/features/chip";
 export const TablePage: React.FC = () => {
   const methods = useForm<OrderFilters>({
     defaultValues: {
-      selectHub: { id: 2, text: "هاب تهران" },
+      selectHub: null,
       selectCustomer: null,
       orderDate: { day: 6, month: 6, year: 1403 },
     },
