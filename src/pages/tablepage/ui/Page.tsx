@@ -1,26 +1,29 @@
 // TablePage.tsx
 import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import type { Order, OrderFilters } from "../model/types";
 import { FilterTable } from "./filter";
 import { DataTable } from "@/features/data-table";
 import { useOrderFilter } from "../model/usegetTableData";
+
+import { FilterChips } from "@/features/chip";
+import { FormAction } from "./form-action";
+import type { Bag, BagFilters } from "../model/types";
 import { columns } from "./coulmns";
-import { FilterChips } from "@/features/chip"; 
 
 export const TablePage: React.FC = () => {
-  const methods = useForm<OrderFilters>({
+  const methods = useForm<BagFilters>({
     defaultValues: {
-      selectHub: null,
-      selectCustomer: null,
-      orderDate: { day: 6, month: 6, year: 1403 },
+      selectsourceHub: null,
+      selectdestinationHub: null,
+      isActive: true,
+      bagNumber:null
     },
   });
-  const [appliedFilters, setAppliedFilters] = useState<OrderFilters>(
+  const [appliedFilters, setAppliedFilters] = useState<BagFilters>(
     methods.getValues()
   );
 
-  const onSubmit = (data: OrderFilters) => {
+  const onSubmit = (data: BagFilters) => {
     setAppliedFilters(data);
   };
 
@@ -33,12 +36,13 @@ export const TablePage: React.FC = () => {
           <FilterChips appliedFilters={appliedFilters} onApply={onSubmit} />
         </form>
       </FormProvider>
-      <DataTable<Order, OrderFilters>
+      <DataTable<Bag, BagFilters>
         columns={columns}
         filters={appliedFilters}
         fetchQuery={useOrderFilter}
         initialPageSize={10}
       />
+      <FormAction />
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
 type AuthState = {
   token: string | null;
@@ -10,7 +10,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   setToken: (token) => {
     set(token ? { token } : { token: null });
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
   },
-  
 }));

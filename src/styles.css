@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
-@config "../tailwind.config.js";
 @layer theme, base, components, utilities;
 
 @font-face {
@@ -12,9 +11,8 @@
   font-display: swap;
 }
 :root {
-  --breakpoint-3xl: 1920px;
-  /* --primary: #ffeae9; */
   --primary: #ef5644;
+  --table-header:#ffeae9;
 }
 @theme {
   --font-sans: "IRANSans", sans-serif;

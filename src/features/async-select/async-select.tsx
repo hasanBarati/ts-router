@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { cn, fetchOption } from "@/shared/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { Button } from "@/shared/ui/button";
-import { Check, ChevronDown, Option } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { useMemo, useState } from "react";
 
@@ -25,6 +25,7 @@ interface AsyncPopoverSelectProps<T> {
   important?: boolean;
   readonly?: boolean;
 }
+
 export function AsyncPopoverSelect<T extends Option | Option[]>({
   url,
   queryKey,
@@ -75,6 +76,7 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
       setOpen(false);
     }
   };
+
   const toggleAll = (checked: boolean) => {
     if (mode === "multiple") onChange(checked ? options : []);
   };
@@ -87,45 +89,40 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   }, [mode, value, placeholder]);
 
   return (
-    <div className="space-y-1 w-full ">
+    <div className="space-y-1 w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            className={` "[all:unset]" h-10 w-full autocompleteWrapper flex justify-between  ${
-              error && "border-red"
-            } ${readonly && "opacity-40"} `}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={`w-full justify-between ${
+              error ? "border-red-500" : ""
+            } ${readonly ? "opacity-40" : ""}`}
           >
-            <div
-              className={`autocompleteLabel  ${
-                error && "text-red"
-              } top-[-17px]`}
-            >
-              {label}
-              <span className="text-tomato font-extrabold text-lg h-4">
-                {important ? "*" : " "}
+            <div className="flex items-center gap-2">
+              {label && (
+                <span className={`${error ? "text-red-500" : ""}`}>
+                  {label}
+                  {important && <span className="text-red-500 ml-1">*</span>}
+                </span>
+              )}
+              <span className={cn(!triggerText && "text-muted-foreground")}>
+                {isLoading
+                  ? "در حال بارگذاری..."
+                  : isError
+                  ? "خطا در بارگذاری"
+                  : triggerText}
               </span>
             </div>
-
-            <span className={cn(!triggerText && "text-muted-foreground")}>
-              {isLoading
-                ? "در حال بارگذاری..."
-                : isError
-                ? "خطا در بارگذاری"
-                : triggerText}
-            </span>
-            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+            <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
-
         <PopoverContent
           side="bottom"
           align="start"
           sideOffset={4}
-          className=" border rounded-md shadow-md overflow-auto"
-          style={{
-            width: "var(--radix-popover-trigger-width)",
-            maxHeight: listHeight,
-          }}
+          className="w-[var(--radix-popover-trigger-width)] p-0 z-100"
         >
           {mode === "multiple" && (
             <div className="flex items-center px-3 py-2 border-b">
@@ -140,16 +137,15 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
               </label>
             </div>
           )}
-
-          <div className="divide-y divide-border">
+          <div className="max-h-[300px] overflow-y-auto">
             {options.map((opt: Option) => {
               const checked = selectedIds.has(opt.id);
               return (
                 <div
                   key={opt.id}
                   className={cn(
-                    "flex items-center px-3 py-2 cursor-pointer text-sm",
-                    checked ? "bg-accent" : "hover:bg-accent/50"
+                    "flex items-center px-3 py-2 cursor-pointer text-sm hover:bg-accent",
+                    checked && "bg-accent"
                   )}
                   onClick={() => toggleOne(opt, !checked)}
                 >
@@ -161,11 +157,9 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
                       className="ml-2"
                     />
                   )}
-
                   {mode === "" && checked && (
                     <Check className="h-4 w-4 ml-2 text-primary" />
                   )}
-
                   <label
                     htmlFor={
                       mode === "single" || mode === "multiple"

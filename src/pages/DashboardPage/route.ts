@@ -3,8 +3,6 @@ import { rootRoute } from "@/app/router";
 import { DashboardPage } from "./ui/Page";
 import { loadUsers } from "./model/loader";
 
-
-
 export const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/dashboard",

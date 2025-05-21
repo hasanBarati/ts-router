@@ -1,22 +1,27 @@
 // src/features/orders/model/useOrderFilter.ts
 import api from "@/shared/lib/apiClient";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import type { DataResponse, Order, OrderFilters } from "./types";
+import type { Bag, BagFilters, DataResponse } from "./types";
+import { useUserStore } from "@/app/user-store";
 
 export const useOrderFilter = (
-  filters: OrderFilters,
+  filters: BagFilters,
   pagination: { pageNumber: number; pageSize: number }
-): UseQueryResult<DataResponse<Order>, Error> => {
-  console.log("filters",filters)
+): UseQueryResult<DataResponse<Bag>, Error> => {
+  const { userInfo } = useUserStore.getState();
+
   return useQuery({
     queryKey: ["orders", filters, pagination],
     queryFn: async () => {
       const response = await api.post(
-        `/consignment-api/consignment/orederfilter?pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`,
-        filters
+        `/core-api/bag/filter?pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}`,
+        {
+          ...filters,
+          hublist: userInfo?.hublist || [],
+        }
       );
-      return response.data.payload as DataResponse<Order>;
+      return response.data.payload as DataResponse<Bag>;
     },
-    // keepPreviousData: true,
+    // placeholderData: (previousData) => previousData
   });
 };

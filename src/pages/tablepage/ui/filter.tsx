@@ -2,51 +2,42 @@ import { AsyncPopoverSelect } from "@/features/async-select/async-select";
 import { Input } from "@/shared/ui/input";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import type { OrderFilters } from "../model/types";
+import type { BagFilters } from "../model/types";
 
 export const FilterTable: React.FC = () => {
-  const { control, register, reset } = useFormContext<OrderFilters>();
+  const { control, register, reset } = useFormContext<BagFilters>();
 
   return (
     <div className="space-y-6 mb-6">
       <div className="grid grid-cols-4 gap-4">
         <Controller
-          name="selectHub"
+          name="selectsourceHub"
           control={control}
           render={({ field }) => (
             <AsyncPopoverSelect
               url="/core-api/hub/select"
-              queryKey={["hubs"]}
-              placeholder="هاب"
+              queryKey={["selectsourceHub"]}
               value={field.value}
               onChange={field.onChange}
-              label="هاب"
+              label="هاب مبدا"
+            />
+          )}
+        />
+        <Controller
+          name="selectdestinationHub"
+          control={control}
+          render={({ field }) => (
+            <AsyncPopoverSelect
+              url="/core-api/hub/select"
+              queryKey={["selectdestinationHub"]}
+              value={field.value}
+              onChange={field.onChange}
+              label="هاب مقصد"
             />
           )}
         />
 
-        {/* <Controller
-          name="selectCustomer"
-          control={control}
-          render={({ field }) => (
-            <AsyncSelect
-              url="/core-api/customers"
-              queryKey={["customers"]}
-              placeholder="مشتری"
-              value={field.value}
-              onChange={field.onChange}
-              mapResponse={(item) => ({
-                id: item.customerId,
-                text: item.fullName,
-              })}
-            />
-          )}
-        /> */}
-
-        <div>
-
-          <Input {...register("orderDate")}  label="fgfdgdf" />
-        </div>
+        <Input {...register("bagNumber")} label="شماره کیسه" />
       </div>
 
       <div className="flex justify-end gap-4">

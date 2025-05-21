@@ -70,7 +70,7 @@ export function DataTable<T, F>({
     <>
       <>
         <table className="min-w-full divide-y divide-gray-200 overflow-auto   rounded-lg shadow-md ">
-          <thead className="  bg-[var(--primary)]">
+          <thead className="  bg-[var(--table-header)]">
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
                 {hg.headers.map((header) => (

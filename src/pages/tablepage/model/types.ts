@@ -19,124 +19,50 @@ export interface SelectOption {
 }
 
 // Filters for querying orders
-export interface OrderFilters {
-  selectHub?: SelectOption | null;
-  orderDate?: DateDto | null;
-  selectCustomer?: SelectOption | null;
+export interface BagFilters {
+  selectsourceHub?: SelectOption | null;
+  selectdestinationHub?: SelectOption | null;
+  isActive?: boolean;
+  bagNumber?: string | null;
 }
 
 // Consignment types
 export interface ConsignmentType extends SelectOption {}
 export interface ContentType extends SelectOption {}
 
-// Individual consignment
-export interface Consignment {
+export interface Bag {
   id: number;
-  selectDeliveryHub?: SelectOption | null;
-  selectPickupHub?: SelectOption | null;
-  selectHoldingHub?: SelectOption | null;
-  selectOriginHub?: SelectOption | null;
-  destinationHubId?: number | null;
-  isActive?: boolean | null;
-  selectConsignmentType: ConsignmentType;
-  cprNumber: number;
-  status: number;
-  selectPickUpType?: SelectOption | null;
-  width: number;
-  height: number;
-  length: number;
-  volume: number;
-  weight: number;
-  value: number;
-  contentType: ContentType;
-  needToReciveCostOfGoods: boolean;
-  costOfGoods?: number | null;
-  needToPack: boolean;
-  numberOfPieces: number;
-  selectDeliveryType?: SelectOption | null;
-  selectReturnType?: SelectOption | null;
-  isTripAssigned?: boolean | null;
-  rescheduledDate?: DateTimeDto | null;
-  orderServiceTime?: string | null;
-  selectCnDirection: number;
-  pickupAddressId?: number | null;
-  bagId?: number | null;
-  thirdPartyId?: number | null;
-  consignmentServices?: unknown[] | null;
-  orderDto?: unknown | null;
-  labeldto?: unknown | null;
-  content: SelectOption;
-  contentofOthers?: string | null;
-  senderDescription?: string | null;
-  messageForReciever?: string | null;
-  messageForDriver?: string | null;
-  packingCost: number;
-  selectPaymentMethod?: SelectOption | null;
-  deliveryAddressId: number;
-  receiverAddressId: number;
-  receiverPhoneId: number;
-  receiverCustomerId?: number | null;
-  receiverProspectId?: number | null;
-  parent?: number | null;
-  nextConsignment: Consignment[];
-  trackingCode: string;
-  deliveryHubId: number;
-  currentHubId: number;
-  pickupHubId?: number | null;
-  holdingHubId?: number | null;
-  originHubId: number;
-  originHubOfLastTripId?: number | null;
-  returnHubId?: number | null;
-  declarativeWeight: number;
-  declarativeVolume: number;
-  declarativeLength: number;
-  declarativeWidth: number;
-  declarativeHeight: number;
-  declarativeValue: number;
-  selectPackage?: SelectOption | null;
-  thirdPartyDelivery?: unknown | null;
-}
-
-// Order entity
-export interface Order {
-  invoiceDtoList?: unknown[] | null;
-  id: number;
+  bagNumber: string;
+  selectBagType: SelectOption | null;
+  selectSourceHub: SelectOption;
+  selectConsignmentsDestinationHub: SelectOption | null;
+  selectDestinationHub: SelectOption | null;
+  selectOwnerHub: SelectOption | null;
+  selectCarrier: SelectOption | null;
   isActive: boolean;
-  isDeleted: boolean;
-  createdDate: DateTimeDto;
-  trackingCode: string;
-  orderDateDto: DateDto;
-  selectPaymentMethod?: SelectOption | null;
-  selectStatus: SelectOption;
-  consignments: Consignment[];
-  orderServices?: unknown | null;
-  selectCustomer: SelectOption;
-  selectSenderAddress: SelectOption;
-  selectSenderPhone: SelectOption;
-  selectReturnAddress: SelectOption;
-  selectPickupAddress: SelectOption;
-  selectHoldingHub: SelectOption;
-  selectPickupHub: SelectOption;
-  selectReturnHub: SelectOption;
-  pickUpDateDto?: DateDto | null;
-  pickUpTimeFrom?: string | null;
-  pickUpTimeTo?: string | null;
-  orderRegistrationHub: SelectOption;
-  senderHubId: number;
-  consignmentCount: number;
-  easyOrder?: boolean | null;
-  author: string;
-  modifier: string;
-  orderPrice?: number | null;
-  invoicePrice?: number | null;
-  modifiedDate: number;
+  status: SelectOption;
+  selecttrip: SelectOption | null;
+  selectCurrentHub: SelectOption | null;
+  weight: number | null;
+  weightCapacity: number;
+  volumeCapacity: number;
+  allocatedWeight: number | null;
+  allocatedVolume: number | null;
+  extraLoad: boolean | null;
+  extraLoadInVehicleId: number | null;
+  lackOfLoad: boolean | null;
+  mismatchStatus: SelectOption | null;
 }
 
 // API paginated response
 export interface DataResponse<T> {
   content: T[];
   pageable: {
-    sort: { sorted: boolean; empty: boolean; unsorted: boolean };
+    sort: {
+      sorted: boolean;
+      empty: boolean;
+      unsorted: boolean;
+    };
     pageSize: number;
     pageNumber: number;
     offset: number;
@@ -149,7 +75,11 @@ export interface DataResponse<T> {
   number: number;
   size: number;
   numberOfElements: number;
-  sort: { sorted: boolean; empty: boolean; unsorted: boolean };
+  sort: {
+    sorted: boolean;
+    empty: boolean;
+    unsorted: boolean;
+  };
   first: boolean;
   empty: boolean;
 }
