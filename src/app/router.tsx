@@ -13,14 +13,15 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
 import { fetchUsers } from "./tableAPI";
 import { useUserStore } from "./user-store";
+import { Layout } from "./layout";
 
 // Create a root route
 export const rootRoute = createRootRoute({
   component: () => (
-    <>
+    <Layout>
       <Outlet />
       <TanStackRouterDevtools />
-    </>
+    </Layout>
   ),
 });
 
