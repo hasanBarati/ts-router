@@ -5,11 +5,13 @@ type AuthState = {
   userInfo: {
     isSuperAdmin: boolean;
     perms: string[];
+    permissionArray: { permission: string[] }[];
     hublist: [];
   } | null;
   setUserInfo: (user: {
     isSuperAdmin: boolean;
     perms: string[];
+    permissionArray: { permission: string[] }[];
     hublist: [];
   }) => void;
 };
