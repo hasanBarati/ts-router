@@ -7,7 +7,6 @@ import { Toaster } from "sonner";
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   useSetAuthentication();
 
-
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-background">
@@ -15,9 +14,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="container flex h-14 items-center"></div>
           </header> */}
         <main className="flex-1 container py-6 mx-auto">{children}</main>
-
         <AppSidebar />
-
         <Toaster />
       </div>
     </SidebarProvider>

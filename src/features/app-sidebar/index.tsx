@@ -16,11 +16,11 @@ import {
   SidebarMenuSubItem,
   SidebarTrigger,
 } from "@/shared/ui/sidebar";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Inbox } from "lucide-react";
 
 import { menuItems, type MenuItem } from "./config/menuItems";
 import { hasPermissionMenu } from "./model/menuPermission";
-
+import { LogoutButton } from "../logout/ui/logout-button";
 
 export function AppSidebar() {
   const renderMenuItems = (items: MenuItem[]) => {
@@ -34,7 +34,7 @@ export function AppSidebar() {
           const visibleSubItems = item.subItems.filter(
             (sub) => !sub.permission || hasPermissionMenu(sub.permission)
           );
-          if (visibleSubItems.length === 0) return null; 
+          if (visibleSubItems.length === 0) return null;
           return (
             <Collapsible key={item.title} defaultOpen={false}>
               <SidebarMenuItem>
@@ -85,7 +85,7 @@ export function AppSidebar() {
       collapsible="icon"
       variant="inset"
       side="right"
-      className="bg-gray-100 "
+      className="bg-gray-100"
     >
       <SidebarContent>
         <SidebarGroup>
@@ -94,6 +94,8 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarTrigger />
               {renderMenuItems(menuItems)}
+
+              <LogoutButton />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -101,4 +103,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-

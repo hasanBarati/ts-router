@@ -25,7 +25,7 @@ export const rootRoute = createRootRoute({
   ),
 });
 
-// Create index route
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
@@ -38,7 +38,7 @@ const indexRoute = createRoute({
   },
 });
 
-// Create the route tree
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   dashboardRoute,
