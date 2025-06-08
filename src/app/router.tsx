@@ -11,8 +11,6 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
-import { fetchUsers } from "./tableAPI";
-import { useUserStore } from "./user-store";
 import { Layout } from "./layout";
 
 // Create a root route
@@ -30,12 +28,7 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: App,
-  pendingComponent: () => <>در حال لود شدن </>,
-  loader: async () => {
-    const user = await fetchUsers();
-    useUserStore.getState().setUserInfo(user);
-    return user;
-  },
+
 });
 
 

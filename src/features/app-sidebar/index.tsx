@@ -17,12 +17,34 @@ import {
   SidebarTrigger,
 } from "@/shared/ui/sidebar";
 import { ChevronDown, Inbox } from "lucide-react";
-
+import { useUserStore } from "@/app/user-store";
 import { menuItems, type MenuItem } from "./config/menuItems";
 import { hasPermissionMenu } from "./model/menuPermission";
 import { LogoutButton } from "../logout/ui/logout-button";
+import { useUserData } from "@/features/auth/hooks/useUserData";
 
 export function AppSidebar() {
+  const { userInfo } = useUserStore();
+  const { isLoading } = useUserData();
+
+  // Show loading state while fetching user data
+  if (isLoading || !userInfo) {
+    return (
+      <Sidebar
+        collapsible="icon"
+        variant="inset"
+        side="right"
+        className="bg-gray-100"
+      >
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel className="px-4">Loading...</SidebarGroupLabel>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    );
+  }
+
   const renderMenuItems = (items: MenuItem[]) => {
     return items
       .filter((item) => {
@@ -94,7 +116,6 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarTrigger />
               {renderMenuItems(menuItems)}
-
               <LogoutButton />
             </SidebarMenu>
           </SidebarGroupContent>

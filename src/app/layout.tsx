@@ -3,9 +3,11 @@ import { useSetAuthentication } from "@/pages/login/hooks/useSetAuth";
 import { SidebarProvider } from "@/shared/ui/sidebar";
 import React from "react";
 import { Toaster } from "sonner";
+import { useUserData } from "@/features/auth/hooks/useUserData";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   useSetAuthentication();
+  useUserData(); // This will handle user data fetching and caching
 
   return (
     <SidebarProvider>
