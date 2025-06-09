@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUsers } from "@/app/tableAPI";
+import { fetchUsers } from "@/app/user-api";
 import { useUserStore } from "@/app/user-store";
-import type { User } from "@/app/tableAPI";
+import type { User } from "@/app/user-api";
 import { useEffect } from "react";
 
 export function useUserData() {
@@ -13,12 +13,12 @@ export function useUserData() {
     queryFn: fetchUsers,
     staleTime: Infinity,
     gcTime: Infinity,
-    enabled: !userInfo, // Only fetch if we don't have user data
+    enabled: !userInfo, 
   });
 
-  // Update user store when data changes
+
   useEffect(() => {
-    if (data && !userInfo) {
+    if (data ) {
       setUserInfo(data);
     }
   }, [data, setUserInfo, userInfo]);

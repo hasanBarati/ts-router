@@ -15,7 +15,7 @@ export const fetchOption = async (
 ) => {
   const { data } = await api.get(url, { params: { filter } });
 
-  const items = data.payload?.content ?? [];
+  const items =  data.payload?.content || data?.payload || [];
 
   return items.map((item: any) =>
     mapResponse ? mapResponse(item) : { id: item.id, text: item.text }

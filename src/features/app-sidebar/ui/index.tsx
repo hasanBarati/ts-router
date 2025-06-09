@@ -1,3 +1,5 @@
+import { useUserStore } from "@/app/user-store";
+import { useUserData } from "@/features/auth/hooks/useUserData";
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,12 +18,10 @@ import {
   SidebarMenuSubItem,
   SidebarTrigger,
 } from "@/shared/ui/sidebar";
-import { ChevronDown, Inbox } from "lucide-react";
-import { useUserStore } from "@/app/user-store";
-import { menuItems, type MenuItem } from "./config/menuItems";
-import { hasPermissionMenu } from "./model/menuPermission";
-import { LogoutButton } from "../logout/ui/logout-button";
-import { useUserData } from "@/features/auth/hooks/useUserData";
+import { ChevronDown } from "lucide-react";
+import { LogoutButton } from "../../logout/ui/logout-button";
+import { menuItems, type MenuItem } from "../config/menuItems";
+import { hasPermissionMenu } from "../model/menuPermission";
 
 export function AppSidebar() {
   const { userInfo } = useUserStore();

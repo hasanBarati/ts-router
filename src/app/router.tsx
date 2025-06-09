@@ -28,7 +28,6 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: App,
-
 });
 
 

@@ -24,11 +24,18 @@ import { AsyncPopoverSelect } from "@/features/async-select/async-select";
 
 export function FormAction() {
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    // resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      destinationHub: null,
+      name:"",
+      code:"",
+      selectHub:null
+      // selectSourceHub: null,
+      // selectDestinationHub: null,
+      // selectBagTypes: null,
+      // selectConsignmentsDestinationHub: null,
+      // selectCarrier: null,
+      // weightCapacity: "",
+      // volumeCapacity: "",
     },
   });
 
@@ -51,25 +58,27 @@ export function FormAction() {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+   
             <FormField
               control={form.control}
-              name="destinationHub"
+              name="selectHub"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>هاب مقصد</FormLabel>
+                  <FormLabel>هاب مبدا</FormLabel>
                   <FormControl>
                     <AsyncPopoverSelect
                       url="/core-api/hub/select"
-                      queryKey={["selectdestinationHub"]}
+                      queryKey={["selectHub"]}
                       value={field.value}
                       onChange={field.onChange}
-                      label="هاب مقصد"
+                      label="هاب مبدا"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name="name"
@@ -77,20 +86,21 @@ export function FormAction() {
                 <FormItem>
                   <FormLabel>نام</FormLabel>
                   <FormControl>
-                    <Input placeholder="نام را وارد کنید" {...field} />
+                    <Input  placeholder="نام" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="email"
+              name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ایمیل</FormLabel>
+                  <FormLabel>کد</FormLabel>
                   <FormControl>
-                    <Input placeholder="ایمیل را وارد کنید" {...field} />
+                    <Input  placeholder="کد" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
