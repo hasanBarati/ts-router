@@ -28,7 +28,7 @@ export const TablePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <>
       <h1 className="text-2xl mb-4">جدول سفارشات</h1>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -43,6 +43,6 @@ export const TablePage: React.FC = () => {
         initialPageSize={10}
       />
       <FormAction />
-    </div>
+    </>
   );
 };

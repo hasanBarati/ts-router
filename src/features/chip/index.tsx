@@ -1,5 +1,5 @@
 // src/features/chip/filter-chips.tsx
-import { BicepsFlexed } from "lucide-react";
+import { BicepsFlexed, X } from "lucide-react";
 import { useFormContext, type Path } from "react-hook-form";
 
 interface FilterChipsProps<T extends Record<string, any>> {
@@ -68,7 +68,7 @@ export const FilterChips = <T extends Record<string, any>>({
             onClick={() => handleRemoveFilter(key)}
             className="text-gray-500 hover:text-red-600"
           >
-            <BicepsFlexed size={18} />
+            <X  size={18} />
           </button>
         </div>
       ))}

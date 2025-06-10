@@ -3,6 +3,7 @@ import { Input } from "@/shared/ui/input";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { BagFilters } from "../model/types";
+import { Button } from "@/shared/ui/button";
 
 export const FilterTable: React.FC = () => {
   const { control, register, reset } = useFormContext<BagFilters>();
@@ -41,16 +42,13 @@ export const FilterTable: React.FC = () => {
       </div>
 
       <div className="flex justify-end gap-4">
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="px-4 py-2 bg-gray-300 text-black rounded"
-        >
-          پاک کردن فیلتر
-        </button>
+        <Button 
+           variant={"default"}
+           title="dsfdsf"
+        >sdfsdf</Button>
         <button
           type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded"
+          className="px-6 py-2 bg-[var(--primary)] text-white rounded"
         >
           اعمال فیلتر
         </button>
