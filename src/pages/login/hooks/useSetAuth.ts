@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
-import { useAuth, hasAuthParams } from 'react-oidc-context';
+import { useEffect } from "react";
+import { useAuth, hasAuthParams } from "react-oidc-context";
 
-import { router } from '@/app/router';
-import { useAuthStore } from '../model/auth-store';
+import { router } from "@/app/router";
+import { useAuthStore } from "../model/auth-store";
 
 export function useSetAuthentication() {
   const auth = useAuth();
   const setToken = useAuthStore((state) => state.setToken);
-
 
   useEffect(() => {
     const notAuthenticated =
@@ -17,7 +16,7 @@ export function useSetAuthentication() {
       !auth.isLoading;
 
     if (notAuthenticated) {
-      router.navigate({ to: '/login' });
+      router.navigate({ to: "/login" });
     }
 
     if (auth?.user?.access_token) {

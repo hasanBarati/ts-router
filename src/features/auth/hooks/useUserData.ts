@@ -3,25 +3,26 @@ import { fetchUsers } from "@/app/user-api";
 import { useUserStore } from "@/app/user-store";
 import type { User } from "@/app/user-api";
 import { useEffect } from "react";
+import { useAuthStore } from "@/pages/login/model/auth-store";
 
 export function useUserData() {
   const setUserInfo = useUserStore((state) => state.setUserInfo);
   const userInfo = useUserStore((state) => state.userInfo);
+  const token = useAuthStore((state) => state.token);
 
   const { data, isLoading } = useQuery<User>({
-    queryKey: ["userData"],
+    queryKey: ["userData", token], 
     queryFn: fetchUsers,
     staleTime: Infinity,
     gcTime: Infinity,
-    enabled: !userInfo, 
+    enabled: !!token && !userInfo?.hublist,
   });
 
-
   useEffect(() => {
-    if (data ) {
+    if (data && !userInfo?.hublist) { 
       setUserInfo(data);
     }
-  }, [data, setUserInfo, userInfo]);
+  }, [data, setUserInfo, userInfo?.hublist]);
 
   return {
     isLoading,

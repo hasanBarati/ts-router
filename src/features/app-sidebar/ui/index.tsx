@@ -27,25 +27,24 @@ export function AppSidebar() {
   const { userInfo } = useUserStore();
   const { isLoading } = useUserData();
 
-  // Show loading state while fetching user data
-  if (isLoading || !userInfo) {
-    return (
-      <Sidebar
-        collapsible="icon"
-        variant="inset"
-        side="right"
-        className="bg-gray-100"
-      >
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="px-4">Loading...</SidebarGroupLabel>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-    );
-  }
-
   const renderMenuItems = (items: MenuItem[]) => {
+    // If no user data, only show items without permission
+    if (!userInfo) {
+      return items
+        .filter((item) => !item.permission)
+        .map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <a href={item.url} className="flex items-center gap-3 pl-4">
+                {item.icon}
+                <span>{item.title}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ));
+    }
+
+    // If we have user data, show all items with proper permissions
     return items
       .filter((item) => {
         if (!item.permission) return true;

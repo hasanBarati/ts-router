@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 import { useUserData } from "@/features/auth/hooks/useUserData";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 
-export const Layout = ({ children }: { children: React.ReactNode }) => {
+export  const Layout = ({ children }: { children: React.ReactNode }) => {
   useSetAuthentication();
   useUserData();
   const isMobile = useIsMobile();
@@ -25,3 +25,5 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     </SidebarProvider>
   );
 };
+
+
