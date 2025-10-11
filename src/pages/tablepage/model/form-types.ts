@@ -17,23 +17,22 @@ export const formSchema = z.object({
       id: z.number(),
       text: z.string(),
     })
-    .nullable(),
+,
+
   selectDestinationHub: z
     .object({
       id: z.number(),
       text: z.string(),
-    })
-    .nullable(),
-    selectConsignmentsDestinationHub: z
-    .object({
-      id: z.number(),
-      text: z.string(),
-    })
-    .nullable(),
+    }),
+
+
+
+  // .nullable(),
+  // .nullable(),
   selectBagTypes: z.object({ id: z.number(), text: z.string() }).nullable(),
   selectCarrier: z.object({ id: z.number(), text: z.string() }).nullable(),
-  weightCapacity:z.string().nullable(),
-  volumeCapacity:z.string().nullable()
+  weightCapacity: z.string().nonempty({ message: "ظرفیت وزنی الزامی است" }),
+  volumeCapacity: z.string().nonempty({ message: "ظرفیت وزنی الزامی است" }),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

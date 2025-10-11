@@ -9,15 +9,16 @@ export function useUserData() {
   const setUserInfo = useUserStore((state) => state.setUserInfo);
   const userInfo = useUserStore((state) => state.userInfo);
   const token = useAuthStore((state) => state.token);
-
+ 
   const { data, isLoading } = useQuery<User>({
     queryKey: ["userData", token], 
     queryFn: fetchUsers,
     staleTime: Infinity,
     gcTime: Infinity,
-    enabled: !!token && !userInfo?.hublist,
+    enabled: !!token && userInfo === null,
   });
-
+  
+  
   useEffect(() => {
     if (data && !userInfo?.hublist) { 
       setUserInfo(data);

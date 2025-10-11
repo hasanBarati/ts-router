@@ -6,6 +6,11 @@ import {
   CollapsibleTrigger,
 } from "@/shared/ui/collapsible";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/shared/ui/hover-card";
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -14,9 +19,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/shared/ui/sidebar";
 import { ChevronDown } from "lucide-react";
 import { LogoutButton } from "../../logout/ui/logout-button";
@@ -26,9 +33,9 @@ import { hasPermissionMenu } from "../model/menuPermission";
 export function AppSidebar() {
   const { userInfo } = useUserStore();
   const { isLoading } = useUserData();
-
+  const { state } = useSidebar();
+  console.log(isLoading, userInfo);
   const renderMenuItems = (items: MenuItem[]) => {
-    // If no user data, only show items without permission
     if (!userInfo) {
       return items
         .filter((item) => !item.permission)
@@ -44,7 +51,6 @@ export function AppSidebar() {
         ));
     }
 
-    // If we have user data, show all items with proper permissions
     return items
       .filter((item) => {
         if (!item.permission) return true;
@@ -56,18 +62,49 @@ export function AppSidebar() {
             (sub) => !sub.permission || hasPermissionMenu(sub.permission)
           );
           if (visibleSubItems.length === 0) return null;
+
           return (
             <Collapsible key={item.title} defaultOpen={false}>
               <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton className="w-full justify-between pl-4">
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      <span>{item.title}</span>
-                    </div>
-                    <ChevronDown className="w-4 h-4 transition-transform data-[state=open]:rotate-180" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
+                <HoverCard
+                  openDelay={200}
+                  open={state === "expanded" ? false : undefined}
+                >
+                  <div className="relative">
+                    <HoverCardTrigger asChild>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton className="w-full justify-between pl-4">
+                          <div className="flex items-center gap-3">
+                            {item.icon}
+                            {state === "expanded" && <span>{item.title}</span>}
+                          </div>
+                          <ChevronDown className="w-4 h-4 transition-transform data-[state=open]:rotate-180" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                    </HoverCardTrigger>
+
+                    {/* HoverCard Content - فقط وقتی Sidebar کوچیک است نمایش داده میشه */}
+                    <HoverCardContent
+                      side="left"
+                      align="start"
+                      className="w-48 p-1"
+                      sideOffset={8}
+                    >
+                      {visibleSubItems.map((subItem) => (
+                        <a
+                          key={subItem.title}
+                          href={subItem.url}
+                          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          {subItem.icon && (
+                            <span className="w-4 h-4">{subItem.icon}</span>
+                          )}
+                          <span>{subItem.title}</span>
+                        </a>
+                      ))}
+                    </HoverCardContent>
+                  </div>
+                </HoverCard>
 
                 <CollapsibleContent>
                   <SidebarMenuSub className="pl-6">
@@ -75,7 +112,7 @@ export function AppSidebar() {
                       <SidebarMenuSubItem key={subItem.title}>
                         <a
                           href={subItem.url}
-                          className="flex items-center gap-3 text-sm pl-4"
+                          className="flex items-center gap-3 text-sm pl-4 hover:bg-secondary p-1 rounded-lg hover:text-primary"
                         >
                           {subItem.title}
                         </a>
@@ -91,7 +128,10 @@ export function AppSidebar() {
         return (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
-              <a href={item.url} className="flex items-center gap-3 pl-4">
+              <a
+                href={item.url}
+                className="flex items-center gap-3 text-sm pl-4 hover:bg-secondary p-1 rounded-lg hover:text-primary"
+              >
                 {item.icon}
                 <span>{item.title}</span>
               </a>
@@ -102,19 +142,26 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar
-      collapsible="icon"
-      variant="inset"
-      side="right"
-      className="bg-gray-100"
-    >
-      <SidebarContent>
+    <Sidebar collapsible="icon" variant="inset" side="right">
+      <SidebarContent className="text-white">
         <SidebarGroup>
           <SidebarGroupLabel className="px-4">Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarTrigger />
-              {renderMenuItems(menuItems)}
+              {isLoading ? (
+                <>
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <SidebarMenuSkeleton key={i} className=" bg-white" />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {renderMenuItems(menuItems)}
+                  <LogoutButton />
+                </>
+              )}
+
               <LogoutButton />
             </SidebarMenu>
           </SidebarGroupContent>

@@ -1,12 +1,11 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "@/app/router";
 import { DashboardPage } from "./ui/Page";
-import { loadUsers } from "./model/loader";
 
 export const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/dashboard",
   component: DashboardPage,
-  loader: loadUsers,
+  // loader: loadUsers,
   staleTime: 1000 * 60,
 });

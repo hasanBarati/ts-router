@@ -18,25 +18,32 @@ function Input({
   important,
   ...props
 }: InputProps) {
-  return (
-    <div
-      className={`autocompleteWrapper  ${error && "border-red"} ${
-        readOnly && "opacity-40"
-      } `}
-    >
-      <div className={`autocompleteLabel  ${error && "text-red"} top-[-17px]`}>
-        {label}{" "}
-        <span className="text-tomato font-extrabold text-lg h-4">
-          {important ? "*" : " "}
-        </span>
-      </div>
 
-      <input
-        type={type}
-        data-slot="input"
-        className={cn("autocompleteInput", className)}
-        {...props}
-      />
+
+  return (
+    <div className="flex flex-col">
+      <div
+        className={`autocompleteWrapper  ${error && "border-red"} ${
+          readOnly && "opacity-40"
+        } `}
+      >
+        <div
+          className={`autocompleteLabel  ${error && "text-red"} top-[-17px]`}
+        >
+          {label}{" "}
+          <span className="text-tomato font-extrabold text-lg h-4">
+            {important ? "*" : " "}
+          </span>
+        </div>
+
+        <input
+          type={type}
+          data-slot="input"
+          className={cn("autocompleteInput", className)}
+          {...props}
+        />
+      </div>
+      {error && <p className="text-red-500 my-1">{error}</p>}
     </div>
   );
 }
