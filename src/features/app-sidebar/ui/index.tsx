@@ -29,12 +29,15 @@ import { ChevronDown } from "lucide-react";
 import { LogoutButton } from "../../logout/ui/logout-button";
 import { menuItems, type MenuItem } from "../config/menuItems";
 import { hasPermissionMenu } from "../model/menuPermission";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 export function AppSidebar() {
+
   const { userInfo } = useUserStore();
   const { isLoading } = useUserData();
   const { state } = useSidebar();
-  console.log(isLoading, userInfo);
+  const isMobile = useIsMobile();
+  console.log(state === "expanded" )
   const renderMenuItems = (items: MenuItem[]) => {
     if (!userInfo) {
       return items
@@ -73,36 +76,37 @@ export function AppSidebar() {
                   <div className="relative">
                     <HoverCardTrigger asChild>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton className="w-full justify-between pl-4">
+                        <SidebarMenuButton className="w-full justify-between pl-4  ">
                           <div className="flex items-center gap-3">
                             {item.icon}
-                            {state === "expanded" && <span>{item.title}</span>}
+                            {(state === "expanded" || isMobile  )? <span>{item.title}</span> : null } 
                           </div>
                           <ChevronDown className="w-4 h-4 transition-transform data-[state=open]:rotate-180" />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                     </HoverCardTrigger>
 
-                    {/* HoverCard Content - فقط وقتی Sidebar کوچیک است نمایش داده میشه */}
-                    <HoverCardContent
-                      side="left"
-                      align="start"
-                      className="w-48 p-1"
-                      sideOffset={8}
-                    >
-                      {visibleSubItems.map((subItem) => (
-                        <a
-                          key={subItem.title}
-                          href={subItem.url}
-                          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                          {subItem.icon && (
-                            <span className="w-4 h-4">{subItem.icon}</span>
-                          )}
-                          <span>{subItem.title}</span>
-                        </a>
-                      ))}
-                    </HoverCardContent>
+                    {!isMobile && (
+                      <HoverCardContent
+                        side="left"
+                        align="start"
+                        className="w-48 p-1"
+                        sideOffset={8}
+                      >
+                        {visibleSubItems.map((subItem) => (
+                          <a
+                            key={subItem.title}
+                            href={subItem.url}
+                            className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                          >
+                            {subItem.icon && (
+                              <span className="w-4 h-4">{subItem.icon}</span>
+                            )}
+                            <span>{subItem.title}</span>
+                          </a>
+                        ))}
+                      </HoverCardContent>
+                    )}
                   </div>
                 </HoverCard>
 
@@ -161,8 +165,6 @@ export function AppSidebar() {
                   <LogoutButton />
                 </>
               )}
-
-              <LogoutButton />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

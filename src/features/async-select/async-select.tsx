@@ -24,12 +24,13 @@ interface AsyncPopoverSelectProps<T> {
   label?: string;
   important?: boolean;
   readonly?: boolean;
+  wrapperClassName?: string;
 }
 
 export function AsyncPopoverSelect<T extends Option | Option[]>({
   url,
   queryKey,
-  placeholder = "انتخاب...",
+  placeholder,
   mode = "",
   value,
   onChange,
@@ -40,6 +41,7 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   label,
   important,
   readonly,
+  wrapperClassName,
 }: AsyncPopoverSelectProps<T>) {
   const {
     data: options = [],
@@ -89,25 +91,39 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
   }, [mode, value, placeholder]);
 
   return (
-    <div className="space-y-1 w-full">
+    <div className={wrapperClassName}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={`w-full justify-between ${
-              error ? "border-red-500" : ""
-            } ${readonly ? "opacity-40" : ""}`}
+            className={cn(
+              "w-full !bg-white justify-between relative h-10",
+              error && "border-red-500",
+              readonly && "opacity-40"
+            )}
           >
-            <div className="flex items-center gap-2">
-              {label && (
-                <span className={`${error ? "text-red-500" : ""}`}>
-                  {label}
-                  {important && <span className="text-red-500 ml-1">*</span>}
-                </span>
-              )}
-              <span className={cn(!triggerText && "text-muted-foreground")}>
+            {/* ✅ اضافه کردن min-w-0 برای جلوگیری از overflow */}
+            <div className="flex items-center gap-2 min-w-0 flex-1 ">
+              <label
+                className={` absolute -top-4 right-4 bg-white z-10  px-2  text-sm ${
+                  error ? "text-red" : "text-darkGray"
+                }`}
+              >
+                {label}{" "}
+                <span className="text-tomato font-extrabold text-lg h-4">
+                  {important ? "*" : " "}
+                </span>{" "}
+              </label>
+            
+              <span
+                className={cn(
+                  "truncate flex-1 text-right",
+                  !triggerText && "text-muted-foreground"
+                )}
+                title={triggerText} 
+              >
                 {isLoading
                   ? "در حال بارگذاری..."
                   : isError
@@ -115,7 +131,8 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
                   : triggerText}
               </span>
             </div>
-            <ChevronDown className="h-4 w-4 opacity-50" />
+            {/* ✅ آیکون همیشه سمت چپ ثابت بمونه */}
+            <ChevronDown className="h-4 w-4 opacity-50 flex-shrink-0 mr-2" />
           </Button>
         </PopoverTrigger>
         <PopoverContent
@@ -154,19 +171,29 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
                       id={`chk-${opt.id}`}
                       checked={checked}
                       onCheckedChange={(c) => toggleOne(opt, !!c)}
-                      className="ml-2"
+                      className="ml-2 flex-shrink-0"
+                    />
+                  )}
+                  {mode === "multiple" && (
+                    <Checkbox
+                      id={`chk-${opt.id}`}
+                      checked={checked}
+                      onCheckedChange={(c) => toggleOne(opt, !!c)}
+                      className="ml-2 flex-shrink-0"
                     />
                   )}
                   {mode === "" && checked && (
-                    <Check className="h-4 w-4 ml-2 text-primary" />
+                    <Check className="h-4 w-4 ml-2 text-primary flex-shrink-0" />
                   )}
+                  {/* ✅ اضافه کردن truncate برای آیتم‌های لیست */}
                   <label
                     htmlFor={
                       mode === "single" || mode === "multiple"
                         ? `chk-${opt.id}`
                         : undefined
                     }
-                    className="flex-1 select-none"
+                    className="flex-1 select-none truncate"
+                    title={opt.text} // ✅ نمایش متن کامل در tooltip
                   >
                     {opt.text}
                   </label>

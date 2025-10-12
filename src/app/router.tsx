@@ -12,6 +12,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
 import { Layout } from "./layout";
+import type { ReactNode } from "react";
 
 // Create a root route
 export const rootRoute = createRootRoute({
@@ -23,13 +24,11 @@ export const rootRoute = createRootRoute({
   ),
 });
 
-
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: App,
 });
-
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -48,8 +47,28 @@ export const router = createRouter({
   defaultPreloadStaleTime: 0,
 });
 
+export interface BreadcrumbMeta {
+  title: string;
+  icon?: ReactNode;
+  parentBreadcrumb?: {
+    title: string;
+    href: string;
+    icon?: ReactNode;
+  };
+}
+
+// ✅ تعریف تایپ سفارشی برای Meta
+export interface RouteMeta {
+  breadcrumb?: BreadcrumbMeta;
+}
+
+// ✅ Extend کردن Register برای اضافه کردن meta type
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+  }
+  
+  interface RouteMeta {
+    breadcrumb?: BreadcrumbMeta;
   }
 }

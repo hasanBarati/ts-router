@@ -16,7 +16,7 @@ export const TablePage: React.FC = () => {
       selectsourceHub: null,
       selectdestinationHub: null,
       isActive: true,
-      bagNumber:null
+      bagNumber: null,
     },
   });
   const [appliedFilters, setAppliedFilters] = useState<BagFilters>(

@@ -7,6 +7,7 @@ interface InputProps extends React.ComponentProps<"input"> {
   error?: string;
   readOnly?: boolean;
   important?: boolean;
+  wrapperClassName?:string;
 }
 
 function Input({
@@ -16,15 +17,16 @@ function Input({
   error,
   readOnly,
   important,
+  wrapperClassName,
   ...props
 }: InputProps) {
 
 
   return (
-    <div className="flex flex-col">
+    <div className={cn(wrapperClassName,"flex flex-col")}>
       <div
-        className={`autocompleteWrapper  ${error && "border-red"} ${
-          readOnly && "opacity-40"
+        className={`autocompleteWrapper  ${error ?"border-red":""} ${
+          readOnly ? "opacity-40":""
         } `}
       >
         <div

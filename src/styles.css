@@ -95,12 +95,23 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 @layer base {
+
   
   body {
     @apply text-sm;
   }
+ 
 }
 @layer components {
+  *::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  *::-webkit-scrollbar-track {
+    @apply shadow-lg bg-red-100 rounded-lg;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-lg bg-red-500;
+  }
   .autocompleteInput {
     @apply px-3 w-full before:content-[attr(data-before)] focus-visible:outline-none relative before:absolute before:-top-12 before:right-5 before:bg-white before:z-30 border-0 mt-1 text-sm;
   }
@@ -109,6 +120,12 @@
   }
   .autocompleteLabel {
     @apply absolute -top-4 right-5 bg-white   px-2 text-gray-500 text-sm;
+  }
+  .searchForm {
+    @apply flex  my-6 gap-4 flex-wrap max-sm:mb-6;
+  }
+  .filterInput {
+    @apply basis-60 max-sm:basis-full;
   }
  
 }

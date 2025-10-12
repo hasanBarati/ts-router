@@ -7,12 +7,14 @@ type AuthState = {
     perms: string[];
     permissionArray: { permission: string[] }[];
     hublist: [];
+    selectEmployee:{id:number,text:string}
   } | null;
   setUserInfo: (user: {
     isSuperAdmin: boolean;
     perms: string[];
     permissionArray: { permission: string[] }[];
     hublist: [];
+    selectEmployee:{id:number,text:string}
   }) => void;
 };
 
