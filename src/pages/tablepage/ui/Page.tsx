@@ -29,7 +29,6 @@ export const TablePage: React.FC = () => {
 
   return (
     <>
-      <h1 className="text-2xl mb-4">جدول سفارشات</h1>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FilterTable />

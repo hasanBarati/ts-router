@@ -25,15 +25,15 @@ function Input({
   return (
     <div className={cn(wrapperClassName,"flex flex-col")}>
       <div
-        className={`autocompleteWrapper  ${error ?"border-red":""} ${
+        className={`inputWrapper  ${error ?"border-red":""} ${
           readOnly ? "opacity-40":""
         } `}
       >
         <div
-          className={`autocompleteLabel  ${error && "text-red"} top-[-17px]`}
+          className={`inputLabel  ${error && "text-red"} top-[-17px]`}
         >
           {label}{" "}
-          <span className="text-tomato font-extrabold text-lg h-4">
+          <span className="text-tomato font-extrabold text-rose-500 text-lg h-4">
             {important ? "*" : " "}
           </span>
         </div>
@@ -41,7 +41,7 @@ function Input({
         <input
           type={type}
           data-slot="input"
-          className={cn("autocompleteInput", className)}
+          className={cn("input", className)}
           {...props}
         />
       </div>
