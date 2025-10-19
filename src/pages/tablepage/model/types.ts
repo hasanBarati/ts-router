@@ -31,14 +31,14 @@ export interface ConsignmentType extends SelectOption {}
 export interface ContentType extends SelectOption {}
 
 export interface Bag {
-  id: number;
+  id?: number;
   bagNumber: string;
-  selectBagType: SelectOption | null;
+  selectBagType: SelectOption ;
   selectSourceHub: SelectOption;
-  selectConsignmentsDestinationHub: SelectOption | null;
-  selectDestinationHub: SelectOption | null;
-  selectOwnerHub: SelectOption | null;
-  selectCarrier: SelectOption | null;
+  selectConsignmentsDestinationHub: SelectOption ;
+  selectDestinationHub: SelectOption ;
+  selectOwnerHub: SelectOption ;
+  selectCarrier: SelectOption ;
   isActive: boolean;
   status: SelectOption;
   selecttrip: SelectOption | null;

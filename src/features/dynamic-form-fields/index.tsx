@@ -1,27 +1,11 @@
 // src/features/dynamic-form-fields/index.tsx
-import { AsyncPopoverSelect } from "@/features/async-select/async-select";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Controller,
-  useForm,
-  type DefaultValues,
-  type Path,
-} from "react-hook-form";
-import { useEffect } from "react";
-import type { FieldConfig } from "./model/type";
+import { Button } from "@/shared/ui/button";
 
-interface DynamicFormProps<T extends Record<string, any>> {
-  fields: FieldConfig<T>[];
-  defaultValues: DefaultValues<T>;
-  onSubmit: (data: T) => void;
-  schema?: any;
-  isSubmitting?: boolean;
-  formClassName?: string;
-  onClose:()=>void
-}
+import type { FieldConfig } from "./model/type";
+import { useEffect } from "react";
+import { DynamicField } from "./ui/dynamic-fileds";
 
 export function DynamicForm<T extends Record<string, any>>({
   fields,
@@ -30,8 +14,16 @@ export function DynamicForm<T extends Record<string, any>>({
   schema,
   isSubmitting,
   formClassName,
-  onClose
-}: DynamicFormProps<T>) {
+  onClose,
+}: {
+  fields: FieldConfig<T>[];
+  defaultValues: any;
+  onSubmit: (data: T) => void;
+  schema?: any;
+  isSubmitting?: boolean;
+  formClassName?: string;
+  onClose: () => void;
+}) {
   const form = useForm<T>({
     defaultValues,
     resolver: schema ? zodResolver(schema) : undefined,
@@ -40,12 +32,14 @@ export function DynamicForm<T extends Record<string, any>>({
 
   const watchedFields = form.watch();
 
+  // dependency clearing logic stays the same
   useEffect(() => {
-    fields.forEach((field) => {
-      if (field.dependsOn) {
-        const currentValue = watchedFields[field.name];
+    if (defaultValues) return;
+    fields.forEach((f) => {
+      if (f.dependsOn) {
+        const currentValue = watchedFields[f.name];
         if (currentValue !== null && currentValue !== undefined) {
-          form.setValue(field.name, null as any, { shouldValidate: false });
+          form.setValue(f.name, null as any, { shouldValidate: false });
         }
       }
     });
@@ -55,88 +49,22 @@ export function DynamicForm<T extends Record<string, any>>({
       .map((f) => watchedFields[f.dependsOn!]),
   ]);
 
-  const getErrorMessage = (fieldName: Path<T>): string | undefined => {
-    const error = form.formState.errors[fieldName];
-    if (!error) return undefined;
-
-    if (typeof error === "object" && "message" in error) {
-      return error.message as string;
-    }
-
-    return undefined;
-  };
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <div className={formClassName}>
-        {fields.map((field) => {
-       
-          const errorMessage = getErrorMessage(field.name);
-
-          if (field.type === "input") {
-            return (
-              <div key={field.name as string}>
-                <Input
-                  {...form.register(field.name)}
-                  {...field.inputProps}
-                  label={field.label}
-                  error={errorMessage}
-                  important={field.important}
-                />
-              </div>
-            );
-          }
-
-          if (field.type === "async-select" && field.asyncSelectProps) {
-            // ✅ گرفتن مقدار فیلد وابسته
-            const watchedValue = field.dependsOn
-              ? watchedFields[field.dependsOn]
-              : undefined;
-            let dynamicUrl: string | undefined;
-            if (field.asyncSelectProps.getDynamicUrl) {
-              dynamicUrl = watchedValue
-                ? field.asyncSelectProps.getDynamicUrl(watchedValue)
-                : undefined;
-            } else {
-              dynamicUrl = field.asyncSelectProps.url;
-            }
-            const isDisabled = field.dependsOn && !watchedValue;
-            const queryKey: string[] = [
-              ...field.asyncSelectProps.queryKey,
-              ...(watchedValue?.id ? [String(watchedValue.id)] : []),
-            ];
-
-            return (
-              <div key={field.name as string}>
-                <Controller
-                  name={field.name}
-                  control={form.control}
-                  render={({ field: controllerField }) => (
-                    <AsyncPopoverSelect
-                      {...field.asyncSelectProps}
-                      url={dynamicUrl}
-                      queryKey={queryKey}
-                      value={controllerField.value}
-                      onChange={(val) => {
-                        controllerField.onChange(val);
-                        form.trigger(field.name);
-                      }}
-                      error={errorMessage}
-          
-                      label={field.label}
-                      important={field.important}
-                      readonly={isDisabled}
-                      
-                    />
-                  )}
-                />
-              </div>
-            );
-          }
-
-          return null;
-        })}
+        {fields.map((f) => (
+          <DynamicField
+            key={f.name as string}
+            field={f}
+            control={form.control}
+            register={form.register}
+            errors={form.formState.errors}
+            trigger={form.trigger}
+            watchedFields={watchedFields}
+          />
+        ))}
       </div>
+
       <div className="flex justify-end gap-2 ">
         <Button
           type="button"

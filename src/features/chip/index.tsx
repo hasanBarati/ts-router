@@ -1,5 +1,5 @@
 // src/features/chip/filter-chips.tsx
-import { BicepsFlexed, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useFormContext, type Path } from "react-hook-form";
 
 interface FilterChipsProps<T extends Record<string, any>> {

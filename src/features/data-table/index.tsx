@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
   type ColumnDef,
+  type RowSelectionState,
 } from "@tanstack/react-table";
 import {
   ChevronLeft,
@@ -22,6 +23,8 @@ export interface DataTableProps<T, F> {
     pagination: { pageNumber: number; pageSize: number }
   ) => UseQueryResult<DataResponse<T>, Error>;
   initialPageSize?: number;
+  enableRowSelection?: boolean;
+  onRowSelectionChange?: (selectedRows: T[]) => void;
 }
 
 export function DataTable<T, F>({
@@ -29,10 +32,12 @@ export function DataTable<T, F>({
   filters,
   fetchQuery,
   initialPageSize = 10,
+  enableRowSelection,
+  onRowSelectionChange
 }: DataTableProps<T, F>) {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
-
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   useEffect(() => {
     setPageNumber(1);
   }, [filters]);
@@ -49,6 +54,11 @@ export function DataTable<T, F>({
     data: rows,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    enableRowSelection: enableRowSelection,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
   });
 
   const getPageRange = () => {
@@ -65,10 +75,17 @@ export function DataTable<T, F>({
     return range;
   };
 
+  useEffect(() => {
+    if (enableRowSelection && onRowSelectionChange) {
+      const selected = table.getSelectedRowModel().flatRows.map(row => row.original);
+      onRowSelectionChange(selected);
+    }
+  }, [rowSelection]);
+  
   return (
     <>
-      <div className="overflow-x-auto">
-        <div className="min-w-full inline-block align-middle">
+      <div className="overflow-x-auto w-full">
+        <div className="min-w-full inline-block align-middle ">
           <div className="overflow-hidden border rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-[var(--table-header)]">
@@ -225,3 +242,5 @@ export function DataTable<T, F>({
     </>
   );
 }
+
+

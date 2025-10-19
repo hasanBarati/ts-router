@@ -1,5 +1,6 @@
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "@/shared/lib/zustand";
+import type { selectResponse } from "@/shared/types/global";
 
 type AuthState = {
   userInfo: {
@@ -7,14 +8,16 @@ type AuthState = {
     perms: string[];
     permissionArray: { permission: string[] }[];
     hublist: [];
-    selectEmployee:{id:number,text:string}
+    selectEmployee: selectResponse;
+    userinfo: selectResponse;
   } | null;
   setUserInfo: (user: {
     isSuperAdmin: boolean;
     perms: string[];
     permissionArray: { permission: string[] }[];
     hublist: [];
-    selectEmployee:{id:number,text:string}
+    selectEmployee: selectResponse;
+    userinfo: selectResponse;
   }) => void;
 };
 

@@ -1,49 +1,60 @@
 import { DynamicForm } from "@/features/dynamic-form-fields";
-import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/shared/ui/dialog";
-import { useFormMutation } from "../../lib/use-form-mutation";
-import { formSchema, type FormValues } from "../../model/form-types";
 import { DialogOverlay } from "@/shared/ui/overlay";
-import { useState } from "react";
-import { FormDefaultValues, FormFields } from "./form-fields";
+import { type FC } from "react";
+import type { Bag } from "../../model/types";
+import { FormFields, getFormValues } from "./form-fields";
+import { useFormMutation } from "./lib/use-form-mutation";
+import { formSchema, type FormValues } from "./model/form-types";
 
+interface FormActionProps {
+  initialData?: Bag | null;
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
+export const FormAction: FC<FormActionProps> = ({
+  initialData,
+  isOpen,
+  onClose,
+}) => {
+  const mutation = useFormMutation(() => {
+    onClose?.();
+  });
 
-export function FormAction() {
-  const mutation = useFormMutation(() => {});
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <DialogOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <Dialog modal={false} open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
+      <DialogOverlay isOpen={isOpen as boolean} />
+      <Dialog modal={false} open={isOpen} onOpenChange={onClose}>
+        {/* <DialogTrigger asChild>
           <Button variant="outline">افزودن فرم</Button>
-        </DialogTrigger>
+        </DialogTrigger> */}
         <DialogContent className="portal">
           <DialogHeader>
-            <DialogTitle>افزودن کیسه</DialogTitle>
+            <DialogTitle> 
+            {initialData ? "ویرایش کیسه" : "افزودن کیسه"}
+            </DialogTitle>
           </DialogHeader>
           <DynamicForm<FormValues>
             fields={FormFields}
             schema={formSchema}
-            defaultValues={FormDefaultValues}
+            defaultValues={getFormValues(initialData)}
             formClassName="grid grid-cols-2 gap-6"
             isSubmitting={mutation.isPending}
             onSubmit={(data) => {
               mutation.mutate(data);
             }}
-            onClose={()=>setIsOpen(false)}
+            onClose={() => onClose?.()}
           />
         </DialogContent>
       </Dialog>
     </>
   );
-}
+};
 
 
