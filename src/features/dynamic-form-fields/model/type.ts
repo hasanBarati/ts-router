@@ -1,42 +1,41 @@
-import type { Path, PathValue } from "react-hook-form";
+import type { Path } from "react-hook-form";
 
-export type FieldType = "input" | "async-select";
+export type FieldType = "input" | "async-select" | "textarea";
 
-export interface FieldConfigBase<T> {
-  name: keyof T;
+interface BaseFieldConfig<T extends Record<string, any>> {
+  name: Path<T>;
   label: string;
-  type: FieldType;
-  important?:boolean
-  dependsOn?:string
-  defaultValue?: PathValue<T, Path<T>>;
+  important?: boolean;
+  dependsOn?: Path<T>;
+  wrapperClassName?:string
 }
 
-export interface InputFieldConfig<T> extends FieldConfigBase<T> {
+// ✅ Input
+interface InputFieldConfig<T extends Record<string, any>> extends BaseFieldConfig<T> {
   type: "input";
   inputProps?: React.ComponentProps<"input">;
 }
 
-export interface AsyncSelectFieldConfig<T> extends FieldConfigBase<T> {
-  type: "async-select";
-  asyncSelectProps: {
-    url?: string;
-    queryKey: readonly string[];
+// ✅ Textarea
+interface TextareaFieldConfig<T extends Record<string, any>> extends BaseFieldConfig<T> {
+  type: "textarea";
+  textareaProps?: React.ComponentProps<"textarea">;
+}
+
+
+interface SwitchFieldConfig<T extends Record<string, any>> extends BaseFieldConfig<T> {
+  type: "switch";
+  switchProps?: {
+    defaultChecked?: boolean;
+    disabled?: boolean;
+    onCheckedChange?: (checked: boolean) => void;
     [key: string]: any;
   };
 }
-
-// export type FieldConfig<T> = InputFieldConfig<T> | AsyncSelectFieldConfig<T>;
-
-
-
-
-export type FieldConfig<T extends Record<string, any>> = {
-  name: Path<T>;
-  label: string;
-  type: FieldType;
-  important?: boolean;
-  inputProps?: React.ComponentProps<"input">;
-  asyncSelectProps?: {
+// ✅ Async Select
+interface AsyncSelectFieldConfig<T extends Record<string, any>> extends BaseFieldConfig<T> {
+  type: "async-select";
+  asyncSelectProps: {
     url?: string;
     queryKey: readonly string[];
     mode?: "" | "single" | "multiple";
@@ -44,5 +43,11 @@ export type FieldConfig<T extends Record<string, any>> = {
     getDynamicUrl?: (dependentValue: any) => string | undefined;
     [key: string]: any;
   };
-  dependsOn?: Path<T>;
-};
+}
+
+// ✅ Union Type
+export type FieldConfig<T extends Record<string, any>> = 
+  | InputFieldConfig<T>
+  | TextareaFieldConfig<T>
+  | SwitchFieldConfig<T>
+  | AsyncSelectFieldConfig<T>;

@@ -37,7 +37,7 @@ export function AppSidebar() {
   const { isLoading } = useUserData();
   const { state } = useSidebar();
   const isMobile = useIsMobile();
-  console.log(state === "expanded" )
+
   const renderMenuItems = (items: MenuItem[]) => {
     if (!userInfo) {
       return items

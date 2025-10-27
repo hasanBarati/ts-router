@@ -10,6 +10,10 @@ import {
   type UseFormTrigger,
 } from "react-hook-form";
 import type { FieldConfig } from "../model/type";
+import { Textarea } from "@/shared/ui/textarea";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
+import { cn } from "@/shared/lib/utils";
 
 interface DynamicFieldProps<T extends Record<string, any>> {
   field: FieldConfig<T>;
@@ -28,8 +32,6 @@ export function DynamicField<T extends Record<string, any>>({
   trigger,
   watchedFields,
 }: DynamicFieldProps<T>) {
-
-
   const getErrorMessage = (name: Path<T>): string | undefined => {
     const e = errors[name];
     if (!e) return undefined;
@@ -50,6 +52,53 @@ export function DynamicField<T extends Record<string, any>>({
         error={errorMessage}
         important={field.important}
       />
+    );
+  }
+
+  if (field.type === "textarea") {
+    return (
+      <Textarea
+        key={field.name as string}
+        {...register(field.name)}
+        {...field.textareaProps}
+        label={field.label}
+        error={errorMessage}
+        important={field.important}
+        wrapperClassName={field.wrapperClassName}
+      />
+    );
+  }
+
+  if (field.type === "switch") {
+    return (
+      <div
+        key={field.name as string}
+        className={cn(
+          "flex flex-row items-center gap-2",
+          field.wrapperClassName
+        )}
+      >
+        <Controller
+          name={field.name}
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <div className="flex items-center gap-2">
+              <Label
+                htmlFor={field.name as string}
+                className="cursor-pointer font-medium"
+              >
+                {value ? "فعال" : "غیرفعال"}
+              </Label>
+              <Switch
+                id={field.name as string}
+                checked={value}
+                onCheckedChange={onChange}
+                {...field.switchProps}
+              />
+            </div>
+          )}
+        />
+      </div>
     );
   }
 

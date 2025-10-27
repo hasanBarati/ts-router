@@ -20,10 +20,12 @@ export interface SelectOption {
 
 // Filters for querying orders
 export interface BagFilters {
+  bagType?: SelectOption | null;
   selectsourceHub?: SelectOption | null;
   selectdestinationHub?: SelectOption | null;
   isActive?: boolean;
   bagNumber?: string | null;
+
 }
 
 // Consignment types

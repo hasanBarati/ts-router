@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { Button } from "@/shared/ui/button";
 import {
-  DndContext,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import {
   closestCenter,
+  DndContext,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -14,24 +22,16 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { useFilterCustomizationStore } from "../model/use-filter-customization-store";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useSaveCustomization } from "../api/use-save-customization";
 import type { CustomizableField, TableColumn } from "../model/type";
+import { useFilterCustomizationStore } from "../model/use-filter-customization-store";
 import { DraggableColumnItem } from "./draggabel-columns";
 import { DraggableFieldItem } from "./draggable-fieldItem";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 
-interface FilterCustomizationDialogProps<T> {
+interface FilterCustomizationDialogProps<T extends Record<string, unknown>> {
   isOpen: boolean;
   onClose: () => void;
   tableKey: string;
@@ -40,7 +40,7 @@ interface FilterCustomizationDialogProps<T> {
   defaultColumns: TableColumn[];
 }
 
-export function FilterCustomizationDialog<T>({
+export function FilterCustomizationDialog<T extends Record<string, unknown>>({
   isOpen,
   onClose,
   tableKey,
@@ -198,12 +198,12 @@ export function FilterCustomizationDialog<T>({
               onDragEnd={handleColumnDragEnd}
             >
               <SortableContext
-                items={localColumns.map((c) => c.id)}
+                items={localColumns.map((c) => c.id!)}
                 strategy={verticalListSortingStrategy}
               >
                 <div className="space-y-2">
                   {localColumns
-                    .sort((a, b) => a.order - b.order)
+                    // .sort((a, b) => a.order - b.order)
                     .map((column) => (
                       <DraggableColumnItem
                         key={column.id}
@@ -216,7 +216,8 @@ export function FilterCustomizationDialog<T>({
                                 : c
                             )
                           );
-                        }}
+                        }
+                      }
                       />
                     ))}
                 </div>

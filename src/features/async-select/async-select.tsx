@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { cn, fetchOption } from "@/shared/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { Button } from "@/shared/ui/button";
-import { Check, ChevronDown, AlertCircle } from "lucide-react";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { useMemo, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useQuery } from "@tanstack/react-query";
+import { AlertCircle, Check, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 type Option = { id: string | number; text: string };
 
@@ -55,15 +55,23 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
 
   const [open, setOpen] = useState(false);
 
-  const selectedIds = useMemo(() => {
-    const s = new Set<string | number>();
-    if (mode === "multiple" && Array.isArray(value)) {
-      value.forEach((v) => s.add(v.id));
-    } else if (value) {
-      s.add((value as Option).id);
-    }
-    return s;
-  }, [mode, value]);
+  // const selectedIds = useMemo(() => {
+  //   const s = new Set<string | number>();
+  //   if (mode === "multiple" && Array.isArray(value)) {
+  //     value.forEach((v) => s.add(v.id));
+  //   } else if (value) {
+  //     s.add((value as Option).id);
+  //   }
+  //   return s;
+  // }, [mode, value]);
+  
+
+  const selectedIds = new Set<string | number>()
+  if (mode === "multiple" && Array.isArray(value)) {
+    value.forEach((v) => selectedIds.add(v.id))
+  } else if (value) {
+    selectedIds.add((value as Option).id)
+  }
 
   const allIds = options.map((o: Option) => o.id);
   const allSelected =
@@ -84,15 +92,22 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
     if (mode === "multiple") onChange(checked ? options : []);
   };
 
-  const triggerText = useMemo(() => {
-    if (mode === "multiple" && Array.isArray(value)) {
-      return value.length ? value.map((v) => v.text).join("، ") : placeholder;
-    }
-    return (value as Option)?.text || placeholder;
-  }, [mode, value, placeholder]);
+  // const triggerText = useMemo(() => {
+  //   if (mode === "multiple" && Array.isArray(value)) {
+  //     return value.length ? value.map((v) => v.text).join("، ") : placeholder;
+  //   }
+  //   return (value as Option)?.text || placeholder;
+  // }, [mode, value, placeholder]);
+  const triggerText =
+  mode === "multiple" && Array.isArray(value)
+    ? value.length
+      ? value.map((v) => v.text).join("، ")
+      : placeholder
+    : (value as Option)?.text || placeholder
+
 
   return (
-    <div className={cn("space-y-1", wrapperClassName)}>
+    <div className={cn("space-y-1 filterInput", wrapperClassName)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -150,8 +165,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
           align="start"
           sideOffset={4}
           className="w-[var(--radix-popover-trigger-width)] p-0 z-100"
-          
-          
         >
           {/* ✅ انتخاب همه (برای حالت multiple) */}
           {mode === "multiple" && (

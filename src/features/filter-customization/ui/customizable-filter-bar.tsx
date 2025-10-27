@@ -17,7 +17,7 @@ import { SearchButton } from "@/shared/ui/search-button";
 import { Skeleton } from "@/shared/ui/skelton";
 import type { CustomizableField, TableColumn } from "../model/type";
 
-interface CustomizableFilterBarProps<T> {
+interface CustomizableFilterBarProps<T extends Record<string, any>> {
   tableKey: string;
   tableName: string;
   defaultFields: CustomizableField<T>[];
@@ -82,15 +82,15 @@ export function CustomizableFilterBar<T extends Record<string, any>>({
     setTimeout(() => setIsCustomizationOpen(true), 100);
   };
 
-  if (isLoading) {
-    return (
-      <div className="searchForm">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-10 w-full" />
-        ))}
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="searchForm">
+  //       {[1, 2, 3].map((i) => (
+  //         <Skeleton key={i} className="h-10 w-full" />
+  //       ))}
+  //     </div>
+  //   );
+  // }
 
   return (
     <>

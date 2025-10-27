@@ -1,3 +1,5 @@
+// src/features/data-table/index.tsx
+
 import type { DataResponse } from "@/pages/tablepage/model/types";
 import type { UseQueryResult } from "@tanstack/react-query";
 import {
@@ -25,6 +27,7 @@ export interface DataTableProps<T, F> {
   initialPageSize?: number;
   enableRowSelection?: boolean;
   onRowSelectionChange?: (selectedRows: T[]) => void;
+  onDataChange?: (data: T[]) => void; // ✅ اضافه شد
 }
 
 export function DataTable<T, F>({
@@ -33,11 +36,13 @@ export function DataTable<T, F>({
   fetchQuery,
   initialPageSize = 10,
   enableRowSelection,
-  onRowSelectionChange
+  onRowSelectionChange,
+  onDataChange, // ✅ اضافه شد
 }: DataTableProps<T, F>) {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
   useEffect(() => {
     setPageNumber(1);
   }, [filters]);
@@ -49,6 +54,13 @@ export function DataTable<T, F>({
 
   const rows = useMemo(() => data?.content ?? [], [data]);
   const totalPages = data?.totalPages ?? 1;
+
+
+  useEffect(() => {
+    if (onDataChange && rows.length > 0) {
+      onDataChange(rows);
+    }
+  }, [rows])
 
   const table = useReactTable({
     data: rows,
@@ -77,15 +89,17 @@ export function DataTable<T, F>({
 
   useEffect(() => {
     if (enableRowSelection && onRowSelectionChange) {
-      const selected = table.getSelectedRowModel().flatRows.map(row => row.original);
+      const selected = table
+        .getSelectedRowModel()
+        .flatRows.map((row) => row.original);
       onRowSelectionChange(selected);
     }
-  }, [rowSelection]);
-  
+  }, [rowSelection, enableRowSelection, onRowSelectionChange, table]);
+
   return (
     <>
       <div className="overflow-x-auto w-full">
-        <div className="min-w-full inline-block align-middle ">
+        <div className="min-w-full inline-block align-middle">
           <div className="overflow-hidden border rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-[var(--table-header)]">
@@ -242,5 +256,3 @@ export function DataTable<T, F>({
     </>
   );
 }
-
-

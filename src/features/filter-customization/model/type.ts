@@ -1,86 +1,86 @@
+// filter-customization/model/type.ts
+
 import type { FieldConfig } from "@/features/dynamic-form-fields/model/type";
 
 
-// ✅ تایپ برای فیلدهای قابل شخصی‌سازی
-export interface CustomizableField<T = any> {
+// ✅ اضافه کردن constraint به T
+export interface CustomizableField<T extends Record<string, any> = Record<string, any>> {
   id: string;
   name: keyof T;
-  header: string;
-  label:string
+  header?: string;
+  label?: string;
   order: number;
   isVisible: boolean;
   isInAdvanced: boolean;
   fieldConfig: FieldConfig<T>;
 }
 
-// ✅ تایپ برای ستون‌های جدول
-export interface TableColumn {
-  id: string;
-  header: string;
-  isVisible: boolean;
-  order: number;
+
+export interface TableColumn<T = any> {
+  id?: string;
+  header?: string | ((props: any) => any);
+  label?: string;
+  isVisible?: boolean;
+  order?: number;
 }
 
 // ✅ تنظیمات هر جدول
-export interface TableCustomization<T = any> {
+export interface TableCustomization<T extends Record<string, any> = Record<string, any>> {
   fields: CustomizableField<T>[];
-  columns: TableColumn[];
+  columns: TableColumn<T>[];
 }
 
 // ✅ State اصلی Store
 export interface FilterCustomizationState {
   tables: Record<string, TableCustomization>;
-  
+
   // فیلدها
   initializeFromApi: (
     tableKey: string,
     apiData: string | null | undefined,
     defaultFields: CustomizableField<any>[],
-    defaultColumns: TableColumn[]
+    defaultColumns: TableColumn<any>[]
   ) => void;
-  
+
   updateFieldOrder: (
     tableKey: string,
     fields: CustomizableField<any>[]
   ) => void;
-  
+
   toggleFieldLocation: (
     tableKey: string,
     fieldId: string
   ) => void;
-  
-  getTableFields: <T>(tableKey: string) => CustomizableField<T>[];
-  
+
+  getTableFields: <T extends Record<string, any>>(
+    tableKey: string
+  ) => CustomizableField<T>[];
+
   // ستون‌ها
   updateColumnOrder: (
     tableKey: string,
-    columns: TableColumn[]
+    columns: TableColumn<any>[]
   ) => void;
-  
+
   toggleColumnVisibility: (
     tableKey: string,
     columnId: string
   ) => void;
-  
-  getTableColumns: (tableKey: string) => TableColumn[];
-  
+
+  getTableColumns: <T = any>(tableKey: string) => TableColumn<T>[];
+
   // بازنشانی
   resetTableToDefault: (
     tableKey: string,
     defaultFields: CustomizableField<any>[],
-    defaultColumns: TableColumn[]
+    defaultColumns: TableColumn<any>[]
   ) => void;
 }
-
-// ✅ تایپ برای پاسخ API
 export interface CustomizationApiResponse {
- payload:{
-    customize: string; 
- }  
+  customize: string;
 }
 
-// ✅ تایپ برای ارسال به API
 export interface CustomizationApiRequest {
-  customize: string; // JSON string
-  userId:number
+  customize: string;
+  userId: number;
 }

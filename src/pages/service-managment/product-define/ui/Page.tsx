@@ -2,52 +2,42 @@ import { FilterChips } from "@/features/chip";
 import { DataTable } from "@/features/data-table";
 import { DeleteConfirmation } from "@/features/delete-confirmation";
 import type { TableColumn } from "@/features/filter-customization/model/type";
-import { useFilterCustomizationStore } from "@/features/filter-customization/model/use-filter-customization-store"; // ✅ اضافه شد
-import React, { useMemo, useState } from "react"; // ✅ اضافه شد useMemo
+import { exportToExcel } from "@/shared/lib/export-excel";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import type { Bag, BagFilters } from "../model/types";
-import { useOrderFilter } from "../model/usegetTableData";
-import { createColumns } from "./coulmns";
-import { FilterTable } from "./filter";
-import { FormAction } from "./form-action";
-import { useDeleteBag } from "./form-action/lib/use-form-mutation";
-import { useVisibleColumns } from "@/shared/hooks/use-visible-columns";
-
-
+import { useDeleteProduct } from "../lib/hooks/use-form-mutation";
+import { useProductFilter } from "../lib/hooks/use-get-tableData";
+import { createColumns } from "../model/table/table-columns-config";
+import type { Product, ProductDefineFilters } from "../model/table/table-types";
+import { FormAction } from "./form/product-form-dialog";
+import { ProductActions } from "./table/table-actions";
+import { FilterTable } from "./table/table-filters";
 
 const defaultColumns: TableColumn[] = createColumns();
 
-export const TablePage: React.FC = () => {
+export const ProductDefine: React.FC = () => {
+  const [tableData, setTableData] = useState<Product[]>([]);
   const [formState, setFormState] = useState<{
     isOpen: boolean;
-    editData: Bag | null;
+    editData: Product | null;
   }>({
     isOpen: false,
     editData: null,
   });
 
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const deleteMutation = useDeleteBag();
-
-  // ✅ دریافت ستون‌های شخصی‌سازی شده از Store
-  const { getTableColumns } = useFilterCustomizationStore();
-
-  const customizedColumns = getTableColumns("bag-table");
-
-  const methods = useForm<BagFilters>({
+  const deleteMutation = useDeleteProduct();
+  const methods = useForm<ProductDefineFilters>({
     defaultValues: {
-      selectsourceHub: null,
-      selectdestinationHub: null,
       isActive: true,
-      bagNumber: null,
     },
   });
 
-  const [appliedFilters, setAppliedFilters] = useState<BagFilters>(
+  const [appliedFilters, setAppliedFilters] = useState<ProductDefineFilters>(
     methods.getValues()
   );
 
-  const onSubmit = (data: BagFilters) => {
+  const onSubmit = (data: ProductDefineFilters) => {
     setAppliedFilters(data);
   };
 
@@ -55,7 +45,7 @@ export const TablePage: React.FC = () => {
     setFormState({ isOpen: true, editData: null });
   };
 
-  const handleEditClick = (bag: Bag) => {
+  const handleEditClick = (bag: Product) => {
     setFormState({ isOpen: true, editData: bag });
   };
 
@@ -71,25 +61,29 @@ export const TablePage: React.FC = () => {
     }
   };
 
-  const allColumns = createColumns({
-    onEdit: handleEditClick,
-    onDelete: setDeleteId,
-  });
+  const handleActiveChange = (value: boolean) => {
+    methods.setValue("isActive", value);
+    const currentValues = methods.getValues();
+    setAppliedFilters({ ...currentValues, isActive: value });
+  };
 
-  const visibleColumns = useVisibleColumns(
-    customizedColumns,
-    defaultColumns,
-    allColumns
-  );
+  const handleTableDataChange = (data: Product[]) => {
+    setTableData(data);
+  };
 
-
+const allColumns = createColumns({
+  onEdit: handleEditClick,
+  onDelete: setDeleteId,
+});
+  const handleExportExcel = async () => {
+    await exportToExcel(allColumns, tableData, {
+      title: "لیست محصولات",
+      fileName: "products",
+    });
+  };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">مدیریت کیسه‌ها</h1>
-      </div>
-
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <FilterTable defaultColumns={defaultColumns} onSubmit={onSubmit} />
@@ -97,25 +91,24 @@ export const TablePage: React.FC = () => {
         </form>
       </FormProvider>
 
-      {/* <TableActions
+      <ProductActions
         onCreateNormal={handleCreateNormal}
-        // onCreateSpecial={handleCreateSpecial}
-        // onExport={handleExport}
-        // onImport={handleImport}
-        // onBulkDelete={handleBulkDelete}
-        onActiveChange={handleActiveChange}
+        onExportExcel={handleExportExcel}
         isActive={appliedFilters.isActive!}
-      /> */}
+        onActiveChange={handleActiveChange}
+        tableData={tableData}
+      />
 
-      <DataTable<Bag, BagFilters>
-        columns={visibleColumns as any}
+      <DataTable<Product, ProductDefineFilters>
+        columns={allColumns}
         filters={appliedFilters}
-        fetchQuery={useOrderFilter}
+        fetchQuery={useProductFilter}
         initialPageSize={10}
         enableRowSelection={true}
         onRowSelectionChange={(selected) => {
           console.log("سطرهای انتخاب شده:", selected);
         }}
+        onDataChange={handleTableDataChange}
       />
 
       <FormAction
@@ -129,8 +122,8 @@ export const TablePage: React.FC = () => {
           isOpen={true}
           onClose={() => setDeleteId(null)}
           onConfirm={handleDeleteConfirm}
-          title="آیا از حذف این کیسه اطمینان دارید؟"
-          itemName={`کیسه شماره ${deleteId}`}
+          title="آیا از حذف این محصول اطمینان دارید؟"
+          itemName={`محصول شماره ${deleteId}`}
           isDeleting={deleteMutation.isPending}
         />
       )}

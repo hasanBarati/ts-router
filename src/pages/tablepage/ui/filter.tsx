@@ -4,9 +4,10 @@ import type { CustomizableField, TableColumn } from "@/features/filter-customiza
 import React from "react";
 import type { BagFilters } from "../model/types";
 
-// ✅ تعریف فیلدهای پیش‌فرض
+
 const defaultFields: CustomizableField<BagFilters>[] = [
   {
+
     id: "bag-1",
     name: "bagNumber",
     label: "شماره کیسه",
@@ -19,9 +20,9 @@ const defaultFields: CustomizableField<BagFilters>[] = [
       type: "input",
       inputProps: {
         placeholder: "جستجوی شماره کیسه...",
-        wrapperClassName: "filterInput",
+  
       },
-    } as FieldConfig<BagFilters>,
+    },
   },
   {
     id: "bag-2",
@@ -103,8 +104,10 @@ interface FilterTableProps {
 
 export const FilterTable: React.FC<FilterTableProps> = ({ defaultColumns,onSubmit }) => {
 
+
+  console.log("defaultColumns",defaultColumns)
   return (
-    <CustomizableFilterBar
+    <CustomizableFilterBar<BagFilters>
       tableKey="bag-table"
       tableName="کیسه‌ها"
       defaultFields={defaultFields}

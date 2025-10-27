@@ -27,9 +27,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             {isMobile && <SidebarTrigger />}
             <Separator orientation="vertical" className="mr-2 h-4" />
             <DynamicBreadcrump />
-          
           </div>
-          <ProfileMenu/>
+          <ProfileMenu />
         </header>
 
         <div className="flex-1 p-6">{children}</div>

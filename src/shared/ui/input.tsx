@@ -23,7 +23,7 @@ function Input({
 
 
   return (
-    <div className={cn(wrapperClassName,"flex flex-col")}>
+    <div className={cn(wrapperClassName,"flex flex-col filterInput")}>
       <div
         className={`inputWrapper  ${error ?"border-red":""} ${
           readOnly ? "opacity-40":""
@@ -33,7 +33,7 @@ function Input({
           className={`inputLabel  ${error && "text-red"} top-[-17px]`}
         >
           {label}{" "}
-          <span className="text-tomato font-extrabold text-rose-500 text-lg h-4">
+          <span className="font-extrabold text-rose-500 text-lg h-4">
             {important ? "*" : " "}
           </span>
         </div>

@@ -4,6 +4,7 @@ import { dashboardRoute } from "@/pages/DashboardPage/route";
 import { loginRoute } from "@/pages/login/route";
 import { tableRoute } from "@/pages/tablepage/route";
 import {
+  HeadContent,
   Outlet,
   createRootRoute,
   createRoute,
@@ -13,11 +14,13 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { App } from "./App";
 import { Layout } from "./layout";
 import type { ReactNode } from "react";
+import { productDefineRoute } from "@/pages/service-managment/product-define/route";
 
 // Create a root route
 export const rootRoute = createRootRoute({
   component: () => (
     <Layout>
+      <HeadContent />
       <Outlet />
       <TanStackRouterDevtools />
     </Layout>
@@ -35,12 +38,13 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   loginRoute,
   tableRoute,
+  productDefineRoute,
 ]);
 
 // Create the router instance
 export const router = createRouter({
   routeTree,
-  context: {},
+
   defaultPreload: "intent",
   scrollRestoration: true,
   defaultStructuralSharing: true,
@@ -67,8 +71,10 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
-  
+
   interface RouteMeta {
     breadcrumb?: BreadcrumbMeta;
   }
 }
+
+
