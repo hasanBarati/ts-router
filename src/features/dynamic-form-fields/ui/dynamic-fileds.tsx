@@ -1,5 +1,5 @@
 // src/features/dynamic-form-fields/ui/dynamic-field.tsx
-import { AsyncPopoverSelect } from "@/features/async-select/async-select";
+import { AsyncPopoverSelect } from "@/features/async-select/ui/async-select";
 import { Input } from "@/shared/ui/input";
 import {
   Controller,

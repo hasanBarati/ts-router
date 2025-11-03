@@ -1,13 +1,13 @@
 // lib/zod-config.ts
 import { z } from "zod";
 
-// ✅ تنظیمات کلی برای پیام‌های خطا
+
 export const zodConfig = {
   required_error: "این فیلد الزامی است",
   invalid_type_error: "نوع داده نامعتبر است",
 };
 
-// ✅ کاستوم اسکیماهای قابل استفاده مجدد
+
 export const requiredString = (message?: string) =>
   z.string({
     required_error: message || "این فیلد الزامی است",
@@ -26,7 +26,7 @@ export const requiredPositiveNumber = (message?: string) =>
       message: "باید عدد مثبت باشد",
     });
 
-// ✅ روش درست - با پیام سفارشی
+
 export const requiredSelect = (message?: string) =>
   z
     .object({
@@ -43,7 +43,7 @@ export const requiredSelect = (message?: string) =>
       })
     );
 
-// ✅ یا روش بهتر - با superRefine
+
 export const requiredSelect2 = (message?: string) =>
   z
     .union([

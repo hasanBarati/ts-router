@@ -30,7 +30,6 @@ import type { CustomizableField, TableColumn } from "../model/type";
 import { useFilterCustomizationStore } from "../model/use-filter-customization-store";
 import { DraggableColumnItem } from "./draggabel-columns";
 import { DraggableFieldItem } from "./draggable-fieldItem";
-
 interface FilterCustomizationDialogProps<T extends Record<string, unknown>> {
   isOpen: boolean;
   onClose: () => void;
@@ -49,15 +48,18 @@ export function FilterCustomizationDialog<T extends Record<string, unknown>>({
   defaultColumns,
 }: FilterCustomizationDialogProps<T>) {
   const {
-    getTableFields,
-    getTableColumns,
     updateFieldOrder,
     updateColumnOrder,
     resetTableToDefault,
   } = useFilterCustomizationStore();
 
-  const storeFields = getTableFields<T>(tableKey);
-  const storeColumns = getTableColumns(tableKey);
+  const storeFields = useFilterCustomizationStore(
+    (state) => state.tables[tableKey]?.fields as CustomizableField<T>[] | undefined
+  ) || [];
+  
+  const storeColumns = useFilterCustomizationStore(
+    (state) => state.tables[tableKey]?.columns as TableColumn[] | undefined
+  ) || [];
 
   const [localFields, setLocalFields] = useState<CustomizableField<T>[]>([]);
   const [localColumns, setLocalColumns] = useState<TableColumn[]>([]);
@@ -65,7 +67,7 @@ export function FilterCustomizationDialog<T extends Record<string, unknown>>({
   const { mutate: saveCustomization, isPending } = useSaveCustomization();
 
   useEffect(() => {
-    if (isOpen) {    
+    if (isOpen) {
       const fieldsToUse = storeFields.length > 0 ? storeFields : defaultFields;
       const columnsToUse =
         storeColumns.length > 0 ? storeColumns : defaultColumns;
@@ -216,8 +218,7 @@ export function FilterCustomizationDialog<T extends Record<string, unknown>>({
                                 : c
                             )
                           );
-                        }
-                      }
+                        }}
                       />
                     ))}
                 </div>

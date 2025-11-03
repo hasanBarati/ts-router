@@ -10,7 +10,8 @@ export const submitForm = async (data: FormValues): Promise<any> => {
 };
 
 export const deleteBag = async (productId: number): Promise<void> => {
-  await api.delete(`/core-api/product/${productId}`, {
+  const response = await api.delete(`/core-api/product/${productId}`, {
     method: "DELETE",
   });
+  return response.data;
 };

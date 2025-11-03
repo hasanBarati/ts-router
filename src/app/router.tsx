@@ -1,10 +1,9 @@
-// import { DashboardPage } from "@/pages/DashboardPage/ui/Page";
-// import { UserFormPage } from "@/pages/UserFormPage/ui/Page";
 import { dashboardRoute } from "@/pages/DashboardPage/route";
 import { loginRoute } from "@/pages/login/route";
 import { tableRoute } from "@/pages/tablepage/route";
 import {
   HeadContent,
+  Link,
   Outlet,
   createRootRoute,
   createRoute,
@@ -16,7 +15,6 @@ import { Layout } from "./layout";
 import type { ReactNode } from "react";
 import { productDefineRoute } from "@/pages/service-managment/product-define/route";
 
-// Create a root route
 export const rootRoute = createRootRoute({
   component: () => (
     <Layout>
@@ -41,7 +39,6 @@ const routeTree = rootRoute.addChildren([
   productDefineRoute,
 ]);
 
-// Create the router instance
 export const router = createRouter({
   routeTree,
 
@@ -49,6 +46,14 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  defaultNotFoundComponent: () => {
+    return (
+      <div>
+        <p>Not found!</p>
+        <Link to="/">Go home</Link>
+      </div>
+    );
+  },
 });
 
 export interface BreadcrumbMeta {
@@ -61,12 +66,10 @@ export interface BreadcrumbMeta {
   };
 }
 
-// ✅ تعریف تایپ سفارشی برای Meta
 export interface RouteMeta {
   breadcrumb?: BreadcrumbMeta;
 }
 
-// ✅ Extend کردن Register برای اضافه کردن meta type
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
@@ -76,5 +79,3 @@ declare module "@tanstack/react-router" {
     breadcrumb?: BreadcrumbMeta;
   }
 }
-
-

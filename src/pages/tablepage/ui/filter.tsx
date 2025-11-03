@@ -42,57 +42,9 @@ const defaultFields: CustomizableField<BagFilters>[] = [
       },
     } as FieldConfig<BagFilters>,
   },
-  {
-    id: "bag-3",
-    name: "sourceHubId",
-    label: "هاب مبدا",
-    isVisible: true,
-    isInAdvanced: true,
-    order: 3,
-    fieldConfig: {
-      name: "sourceHubId",
-      label: "هاب مبدا",
-      type: "async-select",
-      asyncSelectProps: {
-        url: "/core-api/hub/select",
-        queryKey: ["sourceHubId"],
-      },
-    } as FieldConfig<BagFilters>,
-  },
-  {
-    id: "bag-4",
-    name: "destinationHubId",
-    label: "هاب مقصد",
-    isVisible: true,
-    isInAdvanced: true,
-    order: 4,
-    fieldConfig: {
-      name: "destinationHubId",
-      label: "هاب مقصد",
-      type: "async-select",
-      asyncSelectProps: {
-        url: "/core-api/hub/select",
-        queryKey: ["destinationHubId"],
-      },
-    } as FieldConfig<BagFilters>,
-  },
-  {
-    id: "bag-5",
-    name: "status",
-    label: "وضعیت",
-    isVisible: true,
-    isInAdvanced: true,
-    order: 5,
-    fieldConfig: {
-      name: "status",
-      label: "وضعیت",
-      type: "async-select",
-      asyncSelectProps: {
-        url: "/core-api/bag/selectStatuses",
-        queryKey: ["bagStatuses"],
-      },
-    } as FieldConfig<BagFilters>,
-  },
+
+
+  
 ];
 
 
@@ -104,8 +56,6 @@ interface FilterTableProps {
 
 export const FilterTable: React.FC<FilterTableProps> = ({ defaultColumns,onSubmit }) => {
 
-
-  console.log("defaultColumns",defaultColumns)
   return (
     <CustomizableFilterBar<BagFilters>
       tableKey="bag-table"

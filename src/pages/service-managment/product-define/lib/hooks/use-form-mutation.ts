@@ -12,9 +12,6 @@ export const useFormMutation = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["product-define"] });
       onSuccess?.();
     },
-    onError: (error) => {
-      toast.error("خطا در ذخیره اطلاعات");
-    },
   });
 };
 
@@ -25,10 +22,6 @@ export const useDeleteProduct = () => {
     onSuccess: () => {
       toast.success("محصول با موفقیت حذف شد");
       queryClient.invalidateQueries({ queryKey: ["product-define"] });
-    },
-    onError: (error) => {
-      toast.error("خطا در حذف محصول");
-      console.error(error);
     },
   });
 };

@@ -1,5 +1,5 @@
 import { FilterChips } from "@/features/chip";
-import { DataTable } from "@/features/data-table";
+import { DataTable } from "@/features/data-table/ui/data-table";
 import { DeleteConfirmation } from "@/features/delete-confirmation";
 import type { TableColumn } from "@/features/filter-customization/model/type";
 import { exportToExcel } from "@/shared/lib/export-excel";
@@ -10,10 +10,10 @@ import { useProductFilter } from "../lib/hooks/use-get-tableData";
 import { createColumns } from "../model/table/table-columns-config";
 import type { Product, ProductDefineFilters } from "../model/table/table-types";
 import { FormAction } from "./form/product-form-dialog";
-import { ProductActions } from "./table/table-actions";
+import { TableProductActions } from "./table/table-actions";
 import { FilterTable } from "./table/table-filters";
 
-const defaultColumns: TableColumn[] = createColumns();
+const defaultColumns = createColumns() as TableColumn[];
 
 export const ProductDefine: React.FC = () => {
   const [tableData, setTableData] = useState<Product[]>([]);
@@ -71,10 +71,10 @@ export const ProductDefine: React.FC = () => {
     setTableData(data);
   };
 
-const allColumns = createColumns({
-  onEdit: handleEditClick,
-  onDelete: setDeleteId,
-});
+  const allColumns = createColumns({
+    onEdit: handleEditClick,
+    onDelete: setDeleteId,
+  });
   const handleExportExcel = async () => {
     await exportToExcel(allColumns, tableData, {
       title: "لیست محصولات",
@@ -91,7 +91,7 @@ const allColumns = createColumns({
         </form>
       </FormProvider>
 
-      <ProductActions
+      <TableProductActions
         onCreateNormal={handleCreateNormal}
         onExportExcel={handleExportExcel}
         isActive={appliedFilters.isActive!}

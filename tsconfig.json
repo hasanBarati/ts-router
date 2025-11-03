@@ -2,7 +2,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "src/features/async-select/async-select.tsx"
+    "src/features/async-select/ui/async-select.tsx"
   ],
   "compilerOptions": {
     "target": "ES2022",

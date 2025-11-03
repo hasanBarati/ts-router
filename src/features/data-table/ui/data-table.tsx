@@ -1,4 +1,3 @@
-// src/features/data-table/index.tsx
 
 import type { DataResponse } from "@/pages/tablepage/model/types";
 import type { UseQueryResult } from "@tanstack/react-query";

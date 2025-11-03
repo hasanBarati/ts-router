@@ -1,4 +1,4 @@
-// src/features/chip/filter-chips.tsx
+
 import { X } from "lucide-react";
 import { useFormContext, type Path } from "react-hook-form";
 

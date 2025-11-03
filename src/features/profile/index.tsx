@@ -76,7 +76,7 @@ export function ProfileMenu() {
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          onClick={() => navigate({ to: "/profile" })}
+          onClick={() => navigate({ to: "/" })}
           className="cursor-pointer"
         >
           <User className="ml-2 h-4 w-4" />
@@ -84,7 +84,7 @@ export function ProfileMenu() {
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          onClick={() => navigate({ to: "/settings" })}
+          onClick={() => navigate({ to: "/" })}
           className="cursor-pointer"
         >
           <Settings className="ml-2 h-4 w-4" />

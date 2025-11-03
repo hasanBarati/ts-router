@@ -1,21 +1,14 @@
-// src/pages/products/ui/product-actions.tsx
+
 
 import React from "react";
 import { TableActions } from "@/features/table-actions/ui";
 import { Label } from "@/shared/ui/label";
 import { Switch } from "@/shared/ui/switch";
-import type { Product } from "../../model/table/table-types";
+import type { TableProductActionsProps } from "../../model/table/table-types";
 import { useProductActions } from "../../lib/hooks/use-product-actions";
 
-interface ProductActionsProps {
-  onCreateNormal: () => void;
-  onExportExcel: () => void;
-  isActive: boolean;
-  onActiveChange: (value: boolean) => void;
-  tableData?: Product[];
-}
 
-export const ProductActions: React.FC<ProductActionsProps> = ({
+export const TableProductActions: React.FC<TableProductActionsProps> = ({
   onCreateNormal,
   onExportExcel,
   isActive,

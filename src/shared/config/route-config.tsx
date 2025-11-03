@@ -1,4 +1,4 @@
-// @/shared/config/routes.config.ts
+
 
 import { 
   LayoutDashboard, 
@@ -24,7 +24,7 @@ export interface RouteConfig {
   icon: JSX.Element;
   permission: string;
   code?: string;
-  component?: string; // نام کامپوننت (برای lazy load)
+  component?: string; 
   parentBreadcrumb?: {
     title: string;
     href?: string;
@@ -230,7 +230,6 @@ export const routesConfig: RouteConfig[] = [
     ],
   },
 
-  // Consignment Management
   {
     path: "/consignment-management",
     title: "مدیریت مرسوله",

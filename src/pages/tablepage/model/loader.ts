@@ -1,4 +1,3 @@
-import { fetchUsers } from "../api/tableAPI"
 
 
 

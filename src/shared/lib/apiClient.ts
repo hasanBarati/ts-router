@@ -1,14 +1,11 @@
-// src/shared/api/interceptor.ts
+
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 
-
-// ساخت یک instance از axios
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,  // یا هر متغیر محیطی دیگری
+  baseURL: import.meta.env.VITE_BASE_URL,  
   timeout: 10000,
 });
-
 
 api.interceptors.request.use(
   (config) => {
@@ -23,13 +20,11 @@ api.interceptors.request.use(
   }
 );
 
-
 api.interceptors.response.use(
   response => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       localStorage.clear();
-      // مستقیم ریدایرکت به لاگین
       window.location.href = '/login';
     }
     return Promise.reject(error);

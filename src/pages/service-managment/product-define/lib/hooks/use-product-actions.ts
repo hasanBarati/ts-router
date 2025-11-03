@@ -16,7 +16,6 @@ export const useProductActions = ({
   onCreateNormal,
   onExportExcel,
 }: UseProductActionsProps): ActionItem[] => {
-  // ✅ بدون useMemo - React Compiler خودش optimize می‌کنه
   return [
     createAction(ACTION_TYPES.CREATE, onCreateNormal, {
       permission: hasPermission("product.create"),

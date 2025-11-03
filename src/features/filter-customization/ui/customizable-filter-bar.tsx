@@ -1,11 +1,11 @@
 import { Button } from "@/shared/ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext, type Path } from "react-hook-form";
 
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/shared/ui/popover";
 import { Settings, SlidersHorizontal, X } from "lucide-react";
 import { useGetCustomization } from "../api/use-get-customization";
@@ -14,7 +14,6 @@ import { FilterCustomizationDialog } from "./filter-customization-dialog";
 
 import { DynamicField } from "@/features/dynamic-form-fields/ui/dynamic-fileds";
 import { SearchButton } from "@/shared/ui/search-button";
-import { Skeleton } from "@/shared/ui/skelton";
 import type { CustomizableField, TableColumn } from "../model/type";
 
 interface CustomizableFilterBarProps<T extends Record<string, any>> {
@@ -53,18 +52,18 @@ export function CustomizableFilterBar<T extends Record<string, any>>({
   }, [isLoading, customizationData, tableKey, defaultFields, defaultColumns, initializeFromApi]);
 
   const fields = getTableFields<T>(tableKey);
+
+  
   const activeFields = fields.length > 0 ? fields : defaultFields;
 
-  const { mainFields, advancedFields } = useMemo(() => {
-    const visibleFields = activeFields
-      .filter((f) => f.isVisible)
-      .sort((a, b) => a.order - b.order);
 
-    const main = visibleFields.filter((f) => !f.isInAdvanced);
-    const advanced = visibleFields.filter((f) => f.isInAdvanced);
+  const visibleFields = activeFields
+    .filter((f) => f.isVisible)
+    .sort((a, b) => a.order - b.order);
 
-    return { mainFields: main, advancedFields: advanced };
-  }, [activeFields]);
+  const mainFields = visibleFields.filter((f) => !f.isInAdvanced);
+  const advancedFields = visibleFields.filter((f) => f.isInAdvanced);
+
 
   const activeAdvancedFiltersCount = advancedFields.filter((field) => {
     const value = watchedFields[field.name];

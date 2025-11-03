@@ -25,7 +25,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <header className="flex justify-between h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
             {isMobile && <SidebarTrigger />}
-            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Separator  className="mr-2 h-4" />
             <DynamicBreadcrump />
           </div>
           <ProfileMenu />

@@ -1,10 +1,8 @@
-"use client";
+
 
 import type { ColumnDef } from "@tanstack/react-table";
-
 import { Button } from "@/shared/ui/button";
 import { Edit, Trash2 } from "lucide-react";
-
 import { Checkbox } from "@/shared/ui/checkbox";
 import type { Product } from "./table-types";
 

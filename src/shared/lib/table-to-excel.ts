@@ -7,7 +7,6 @@ export function convertColumnsToExcelMapper<T>(
 ): (item: T) => Record<string, any> {
   return (item: T) => {
     const row: Record<string, any> = {};
-
     columns
       .filter(col => col.id !== 'select' && col.id !== 'actions')
       .forEach(column => {
@@ -16,9 +15,8 @@ export function convertColumnsToExcelMapper<T>(
         if ('accessorKey' in column && column.accessorKey) {
           const value = (item as any)[column.accessorKey];
           
-          // اگه cell function داشت، ازش استفاده کن
+   
           if (column.cell && typeof column.cell === 'function') {
-            // شبیه‌سازی cell context
             const cellValue = column.cell({
               row: { original: item },
               getValue: () => value,

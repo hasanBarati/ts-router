@@ -1,10 +1,10 @@
 // src/features/dynamic-form-fields/index.tsx
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shared/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import type { FieldConfig } from "./model/type";
 import { useEffect } from "react";
+import type { FieldConfig } from "./model/type";
 import { DynamicField } from "./ui/dynamic-fileds";
 
 export function DynamicForm<T extends Record<string, any>>({

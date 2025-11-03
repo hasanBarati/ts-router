@@ -1,4 +1,4 @@
-// src/shared/hooks/use-breadcrumb.ts
+
 import { useMatches } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
@@ -13,10 +13,8 @@ export function useBreadcrumb(): BreadcrumbItem[] {
   const breadcrumbs: BreadcrumbItem[] = [];
 
   matches.forEach((match) => {
-    const breadcrumbData = match.staticData?.breadcrumb;
-
+    const breadcrumbData = (match.staticData as { breadcrumb?: any })?.breadcrumb;
     if (breadcrumbData) {
-      // ✅ اگه parent داره، اول parent رو اضافه کن
       if (breadcrumbData.parentBreadcrumb) {
         breadcrumbs.push({
           title: breadcrumbData.parentBreadcrumb.title,
@@ -24,8 +22,6 @@ export function useBreadcrumb(): BreadcrumbItem[] {
           icon: breadcrumbData.parentBreadcrumb.icon,
         });
       }
-
-      // ✅ بعد خود صفحه رو اضافه کن
       breadcrumbs.push({
         title: breadcrumbData.title,
         href: match.pathname,

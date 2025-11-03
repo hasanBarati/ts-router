@@ -22,7 +22,7 @@ export function DraggableColumnItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: column.id });
+  } = useSortable({ id: column.id! });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -53,7 +53,7 @@ export function DraggableColumnItem({
         <Switch
           id={`visibility-${column.id}`}
           checked={column.isVisible}
-          onCheckedChange={() => onToggleVisibility(column.id)}
+          onCheckedChange={() => onToggleVisibility(column.id!)}
         />
         {column.isVisible ? (
           <Eye className="w-4 h-4 text-green-600" />

@@ -1,15 +1,15 @@
 // src/features/orders/model/useOrderFilter.ts
-import { useUserStore } from "@/app/user-store";
 import api from "@/shared/lib/apiClient";
+import type { DataResponse } from "@/shared/types/global";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import type { DataResponse, Product, ProductDefineFilters } from "../../model/table/table-types";
+import type { Product, ProductDefineFilters } from "../../model/table/table-types";
 
 
 export const useProductFilter = (
   filters: ProductDefineFilters,
   pagination: { pageNumber: number; pageSize: number }
 ): UseQueryResult<DataResponse<Product>, Error> => {
-  const { userInfo } = useUserStore.getState();
+  // const { userInfo } = useUserStore.getState();
 
   return useQuery({
     queryKey: ["product-define", filters, pagination],
@@ -19,7 +19,7 @@ export const useProductFilter = (
         {
           ...filters,
           productGroup:filters.productGroup?.id,
-          hublist: userInfo?.hublist || [],
+          // hublist: userInfo?.hublist || [],
         }
       );
       return response.data.payload as DataResponse<Product>;

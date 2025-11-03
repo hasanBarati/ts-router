@@ -4,9 +4,6 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import type { ColumnDef } from "@tanstack/react-table";
 
-/**
- * خروجی اکسل ساده
- */
 export async function exportToExcel<T>(
   columns: ColumnDef<T>[],
   data: T[],
@@ -17,20 +14,20 @@ export async function exportToExcel<T>(
 ) {
   const { title = 'گزارش', fileName = 'export' } = options;
 
-  // ✅ فیلتر ستون‌های قابل اکسپورت
+
   const exportColumns = columns.filter(
     col => col.id !== 'select' && col.id !== 'actions'
   );
 
-  // ✅ استخراج headers
+
   const headers = exportColumns.map(col => 
     typeof col.header === 'string' ? col.header : col.id || ''
   );
 
-  // ✅ تبدیل داده‌ها
+ 
   const rows = data.map(item => {
     return exportColumns.map(column => {
-      // اگه cell function داره
+ 
       if (column.cell && typeof column.cell === 'function') {
         const cellValue = column.cell({
           row: { original: item },
@@ -43,14 +40,13 @@ export async function exportToExcel<T>(
           },
         } as any);
         
-        // اگه object بود (مثل productGroup.text)
         if (typeof cellValue === 'object' && cellValue !== null) {
           return '';
         }
         return cellValue;
       }
       
-      // اگه accessorKey داره
+
       if ('accessorKey' in column && column.accessorKey) {
         const keys = String(column.accessorKey).split('.');
         const value = keys.reduce((obj, key) => obj?.[key], item as any);
@@ -64,13 +60,13 @@ export async function exportToExcel<T>(
     });
   });
 
-  // ✅ ایجاد فایل اکسل
+
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Sheet1', {
     views: [{ rightToLeft: true }],
   });
 
-  // عنوان
+
   if (title) {
     worksheet.mergeCells(1, 1, 1, headers.length);
     const titleCell = worksheet.getCell(1, 1);
@@ -85,7 +81,7 @@ export async function exportToExcel<T>(
     worksheet.getRow(1).height = 30;
   }
 
-  // هدر
+
   const headerRow = worksheet.addRow(headers);
   headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
   headerRow.fill = {
@@ -96,7 +92,7 @@ export async function exportToExcel<T>(
   headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
   headerRow.height = 25;
 
-  // داده‌ها
+
   rows.forEach(row => {
     const dataRow = worksheet.addRow(row);
     dataRow.eachCell(cell => {
@@ -110,7 +106,7 @@ export async function exportToExcel<T>(
     });
   });
 
-  // عرض ستون‌ها
+
   worksheet.columns.forEach((column, index) => {
     let maxLength = headers[index].length;
     rows.forEach(row => {
@@ -120,14 +116,14 @@ export async function exportToExcel<T>(
     column.width = Math.min(Math.max(maxLength + 2, 10), 50);
   });
 
-  // فریز هدر
+
   worksheet.views = [{
     rightToLeft: true,
     state: 'frozen',
     ySplit: title ? 2 : 1,
   }];
 
-  // دانلود
+
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

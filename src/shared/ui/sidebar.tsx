@@ -1,11 +1,19 @@
 "use client";
 
-import * as React from "react";
+import { Separator } from "@radix-ui/react-select";
 import { Slot } from "@radix-ui/react-slot";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Menu, PanelLeftIcon } from "lucide-react";
-import { TooltipProvider } from "./tooltip";
+import { Menu } from "lucide-react";
+import * as React from "react";
+import { useIsMobile } from "../hooks/use-mobile";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
+import { Input } from "./input";
 import {
   Sheet,
   SheetContent,
@@ -13,16 +21,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./sheet";
-import { Button } from "./button";
-import { useIsMobile } from "../hooks/use-mobile";
-import { Input } from "./input";
-import { Separator } from "@radix-ui/react-select";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
 import { Skeleton } from "./skelton";
+import { TooltipProvider } from "./tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -67,9 +67,6 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
-
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen);
   const open = openProp ?? _open;
   const setOpen = React.useCallback(
@@ -108,8 +105,6 @@ function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar]);
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed";
 
   const contextValue = React.useMemo<SidebarContextProps>(
@@ -720,5 +715,5 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar,
+  useSidebar
 };

@@ -40,7 +40,7 @@ export const useFilterCustomizationStore = create<FilterCustomizationState>()(
               s.startsWith(field.id)
             );
             if (statusEntry) {
-              const [id, location] = statusEntry.split(":");
+              const [_, location] = statusEntry.split(":");
               return {
                 ...field,
                 isInAdvanced: location === "advanced",
@@ -69,8 +69,6 @@ export const useFilterCustomizationStore = create<FilterCustomizationState>()(
               };
             }
           });
-
-   
 
           set((state) => ({
             tables: {

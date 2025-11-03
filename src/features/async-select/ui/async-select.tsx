@@ -5,27 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
-
-type Option = { id: string | number; text: string };
-
-type Mode = "" | "single" | "multiple";
-
-interface AsyncPopoverSelectProps<T> {
-  url?: string;
-  queryKey?: readonly string[];
-  placeholder?: string;
-  mode?: Mode;
-  value?: T extends Option[] ? Option[] : Option | null;
-  onChange: (value: T extends Option[] ? Option[] : Option | null) => void;
-  filter?: string;
-  mapResponse?: (item: any) => Option;
-  listHeight?: number;
-  error?: string;
-  label?: string;
-  important?: boolean;
-  readonly?: boolean;
-  wrapperClassName?: string;
-}
+import type { AsyncPopoverSelectProps, Option } from "../model/type";
 
 export function AsyncPopoverSelect<T extends Option | Option[]>({
   url,
@@ -49,28 +29,17 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
     isError,
   } = useQuery({
     queryKey: [...queryKey, filter],
-    queryFn: () => fetchOption(url, filter, mapResponse),
+    queryFn: () => fetchOption(url!, filter, mapResponse),
     enabled: !!url,
   });
 
   const [open, setOpen] = useState(false);
 
-  // const selectedIds = useMemo(() => {
-  //   const s = new Set<string | number>();
-  //   if (mode === "multiple" && Array.isArray(value)) {
-  //     value.forEach((v) => s.add(v.id));
-  //   } else if (value) {
-  //     s.add((value as Option).id);
-  //   }
-  //   return s;
-  // }, [mode, value]);
-  
-
-  const selectedIds = new Set<string | number>()
+  const selectedIds = new Set<string | number>();
   if (mode === "multiple" && Array.isArray(value)) {
-    value.forEach((v) => selectedIds.add(v.id))
+    value.forEach((v) => selectedIds.add(v.id));
   } else if (value) {
-    selectedIds.add((value as Option).id)
+    selectedIds.add((value as Option).id);
   }
 
   const allIds = options.map((o: Option) => o.id);
@@ -92,19 +61,12 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
     if (mode === "multiple") onChange(checked ? options : []);
   };
 
-  // const triggerText = useMemo(() => {
-  //   if (mode === "multiple" && Array.isArray(value)) {
-  //     return value.length ? value.map((v) => v.text).join("، ") : placeholder;
-  //   }
-  //   return (value as Option)?.text || placeholder;
-  // }, [mode, value, placeholder]);
   const triggerText =
-  mode === "multiple" && Array.isArray(value)
-    ? value.length
-      ? value.map((v) => v.text).join("، ")
-      : placeholder
-    : (value as Option)?.text || placeholder
-
+    mode === "multiple" && Array.isArray(value)
+      ? value.length
+        ? value.map((v) => v.text).join("، ")
+        : placeholder
+      : (value as Option)?.text || placeholder;
 
   return (
     <div className={cn("space-y-1 filterInput", wrapperClassName)}>
@@ -139,7 +101,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
                 </label>
               )}
 
-              {/* ✅ متن انتخاب شده */}
               <span
                 className={cn(
                   "truncate flex-1 text-right",
@@ -155,7 +116,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
               </span>
             </div>
 
-            {/* ✅ آیکون Chevron */}
             <ChevronDown className="h-4 w-4 opacity-50 flex-shrink-0 mr-2" />
           </Button>
         </PopoverTrigger>
@@ -166,7 +126,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
           sideOffset={4}
           className="w-[var(--radix-popover-trigger-width)] p-0 z-100"
         >
-          {/* ✅ انتخاب همه (برای حالت multiple) */}
           {mode === "multiple" && (
             <div className="flex items-center px-3 py-2 border-b">
               <Checkbox
@@ -184,7 +143,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
             </div>
           )}
 
-          {/* ✅ لیست آیتم‌ها */}
           <div
             className="overflow-y-auto"
             style={{ maxHeight: `${listHeight}px` }}
@@ -216,12 +174,10 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
                       />
                     )}
 
-                    {/* ✅ آیکون Check برای حالت پیش‌فرض */}
                     {mode === "" && checked && (
                       <Check className="h-4 w-4 ml-2 text-primary flex-shrink-0" />
                     )}
 
-                    {/* ✅ متن آیتم */}
                     <label
                       htmlFor={
                         mode === "single" || mode === "multiple"
@@ -240,8 +196,6 @@ export function AsyncPopoverSelect<T extends Option | Option[]>({
           </div>
         </PopoverContent>
       </Popover>
-
-      {/* ✅ نمایش پیام Error */}
       {error && (
         <div className="flex items-center gap-1.5 text-sm text-red-500 mt-1">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />

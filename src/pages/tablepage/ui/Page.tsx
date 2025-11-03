@@ -1,9 +1,10 @@
 import { FilterChips } from "@/features/chip";
-import { DataTable } from "@/features/data-table";
+import { DataTable } from "@/features/data-table/ui/data-table";
 import { DeleteConfirmation } from "@/features/delete-confirmation";
 import type { TableColumn } from "@/features/filter-customization/model/type";
 import { useFilterCustomizationStore } from "@/features/filter-customization/model/use-filter-customization-store"; // ✅ اضافه شد
-import React, { useMemo, useState } from "react"; // ✅ اضافه شد useMemo
+import { useVisibleColumns } from "@/shared/hooks/use-visible-columns";
+import React, { useState } from "react"; // ✅ اضافه شد useMemo
 import { FormProvider, useForm } from "react-hook-form";
 import type { Bag, BagFilters } from "../model/types";
 import { useOrderFilter } from "../model/usegetTableData";
@@ -11,11 +12,8 @@ import { createColumns } from "./coulmns";
 import { FilterTable } from "./filter";
 import { FormAction } from "./form-action";
 import { useDeleteBag } from "./form-action/lib/use-form-mutation";
-import { useVisibleColumns } from "@/shared/hooks/use-visible-columns";
 
-
-
-const defaultColumns: TableColumn[] = createColumns();
+const defaultColumns = createColumns() as TableColumn[];
 
 export const TablePage: React.FC = () => {
   const [formState, setFormState] = useState<{
@@ -51,10 +49,6 @@ export const TablePage: React.FC = () => {
     setAppliedFilters(data);
   };
 
-  const handleCreateNormal = () => {
-    setFormState({ isOpen: true, editData: null });
-  };
-
   const handleEditClick = (bag: Bag) => {
     setFormState({ isOpen: true, editData: bag });
   };
@@ -81,8 +75,6 @@ export const TablePage: React.FC = () => {
     defaultColumns,
     allColumns
   );
-
-
 
   return (
     <div className="space-y-6">

@@ -6,12 +6,12 @@ import { GripVertical } from "lucide-react";
 import type { CustomizableField } from "../model/type";
 
 
-interface DraggableFieldItemProps<T = any> {
+interface DraggableFieldItemProps<T extends Record<string, any> = Record<string, any>> {
   field: CustomizableField<T>;
   onToggleLocation: (id: string) => void;
 }
 
-export function DraggableFieldItem<T>({
+export function DraggableFieldItem<T extends Record<string, any>>({
   field,
   onToggleLocation,
 }: DraggableFieldItemProps<T>) {
